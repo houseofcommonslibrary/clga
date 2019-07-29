@@ -3,7 +3,7 @@
 #' Download traffic data for a given view
 #'
 #' \code{fetch_view_traffic} downloads data showing the number of users,
-#' sessions, and pagevies for a given view during the given dates and returns
+#' sessions, and pageviews for a given view during the given dates and returns
 #' the data as a tibble.
 #'
 #' @param view_id The view id in Google Analytics
@@ -26,7 +26,7 @@ fetch_view_traffic <- function(view_id, start_date, end_date) {
 #' Download traffic data for all pages in the research briefings view
 #'
 #' \code{fetch_briefings_traffic} downloads data showing the number of users,
-#' sessions, and pagevies for all research briefings under the research
+#' sessions, and pageviews for all research briefings under the research
 #' briefings view during the given dates and returns the data as a tibble.
 #'
 #' Note that this is not all research briefings traffic, as it does not include
@@ -62,7 +62,7 @@ fetch_briefings_traffic <- function(start_date, end_date) {
 #' Download traffic data for a page with the given URL and view id
 #'
 #' \code{fetch_page_traffic} downloads data showing the number of users,
-#' sessions, and pagevies for a given url during the given dates and returns
+#' sessions, and pageviews for a given url during the given dates and returns
 #' the data as a tibble.
 #'
 #' @param url The URL of a page.
@@ -101,7 +101,7 @@ fetch_page_traffic <- function(url, view_id, start_date, end_date) {
 #' Download traffic data for a research briefing with the given URL
 #'
 #' \code{fetch_briefing_traffic} downloads data showing the number of users,
-#' sessions, and pagevies for a given research briefing url during the given
+#' sessions, and pageviews for a given research briefing url during the given
 #' dates and returns the data as a tibble.
 #'
 #' @param url The URL of a page for which traffic data is requested.
