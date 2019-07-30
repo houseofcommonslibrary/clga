@@ -8,6 +8,6 @@
 #' @export
 
 get_path <- function(url) {
-    url_parts <- httr::parse_url(url)
+    url_parts <- urltools::url_parse(url)
     stringr::str_to_lower(stringr::str_c("/", url_parts$path))
 }

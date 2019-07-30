@@ -16,6 +16,7 @@ Imports:
     magrittr,
     rlang,
     stringr,
-    tibble
+    tibble,
+    urltools
 Remotes: olihawkins/clbrief
 RoxygenNote: 6.1.1
