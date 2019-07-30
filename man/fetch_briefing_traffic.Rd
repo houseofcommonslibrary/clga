@@ -18,6 +18,6 @@ A tibble of users, sessions, and pageviews by date.
 }
 \description{
 \code{fetch_briefing_traffic} downloads data showing the number of users,
-sessions, and pagevies for a given research briefing url during the given
+sessions, and pageviews for a given research briefing url during the given
 dates and returns the data as a tibble.
 }

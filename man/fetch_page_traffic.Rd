@@ -20,7 +20,7 @@ A tibble of users, sessions, and pageviews by date.
 }
 \description{
 \code{fetch_page_traffic} downloads data showing the number of users,
-sessions, and pagevies for a given url during the given dates and returns
+sessions, and pageviews for a given url during the given dates and returns
 the data as a tibble.
 }
 \keyword{internal}
