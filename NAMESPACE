@@ -2,6 +2,7 @@
 
 export(fetch_briefing_traffic)
 export(fetch_briefings_traffic)
+export(fetch_commons_research_briefings_traffic)
 export(get_path)
 importFrom(magrittr,"%>%")
 importFrom(rlang,.data)

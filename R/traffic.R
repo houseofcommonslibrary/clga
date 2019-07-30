@@ -85,6 +85,21 @@ fetch_briefings_traffic <- function(
             dim_filters))
 }
 
+#' Download traffic data for Commons Library research briefings landing pages
+#'
+#' \code{fetch_commons_research_briefings_traffic} downloads data showing the
+#' number of users, sessions, and pageviews for all Commons Library research
+#' briefings during the given dates and returns the data as a tibble. These are
+#' the landing pages for briefings whose codes begin with "SN" or "CBP".
+#'
+#' Note that this is not all research briefings traffic, as it does not include
+#' traffic to the research briefings pages on the Parliamentary intranet.
+#'
+#' @param start_date The start date as an ISO 8601 string.
+#' @param end_date The end date as an ISO 8601 string.
+#' @return A tibble of users, sessions, and pageviews by date.
+#' @export
+
 fetch_commons_research_briefings_traffic <- function(start_date, end_date) {
 
     sn_filter <- googleAnalyticsR::dim_filter(
