@@ -10,3 +10,4 @@ DATE_START_RB_NEW <- "2019-05-01"
 
 PATH_PREFIX_RB_SN <- "/researchbriefing/summary/sn"
 PATH_PREFIX_RB_CBP <- "/researchbriefing/summary/cbp"
+PATH_PREFIX_RB_CDP <- "/researchbriefing/summary/cdp"

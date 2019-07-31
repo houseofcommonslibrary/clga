@@ -4,7 +4,8 @@
 \alias{fetch_traffic}
 \title{Download traffic data for a given view}
 \usage{
-fetch_traffic(view_id, start_date, end_date, dim_filters = NULL)
+fetch_traffic(view_id, start_date, end_date, dimensions = c("date"),
+  dim_filters = NULL)
 }
 \arguments{
 \item{view_id}{The view id in Google Analytics}
@@ -13,14 +14,18 @@ fetch_traffic(view_id, start_date, end_date, dim_filters = NULL)
 
 \item{end_date}{The end date as an ISO 8601 string.}
 
-\item{dim_filters}{A set of dimension filters to constrain the results.}
+\item{dimensions}{A vector of dimensions to return. The default is "date".}
+
+\item{dim_filters}{A set of dimension filters to constrain the results. The
+default is NULL.}
+
+\item{end_date}{The end date as an ISO 8601 string.}
 }
 \value{
-A tibble of users, sessions, and pageviews by date.
+A tibble of traffic metrics.
 }
 \description{
-\code{fetch_traffic} downloads data showing the number of users,
-sessions, and pageviews for a given view during the given dates and returns
-the data as a tibble.
+\code{fetch_traffic} downloads data on traffic metrics for a given view
+during the given dates and returns the data as a tibble.
 }
 \keyword{internal}

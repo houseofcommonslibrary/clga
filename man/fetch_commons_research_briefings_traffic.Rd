@@ -2,23 +2,27 @@
 % Please edit documentation in R/traffic.R
 \name{fetch_commons_research_briefings_traffic}
 \alias{fetch_commons_research_briefings_traffic}
-\title{Download traffic data for Commons Library research briefings landing pages}
+\title{Download traffic data for all Commons research briefings landing pages}
 \usage{
-fetch_commons_research_briefings_traffic(start_date, end_date)
+fetch_commons_research_briefings_traffic(start_date, end_date,
+  detailed = FALSE)
 }
 \arguments{
 \item{start_date}{The start date as an ISO 8601 string.}
 
 \item{end_date}{The end date as an ISO 8601 string.}
+
+\item{detailed}{A boolean indicating whether to return the results by date
+in total, or broken down by individual page. The default is FALSE.}
 }
 \value{
-A tibble of users, sessions, and pageviews by date.
+A tibble of traffic metrics.
 }
 \description{
-\code{fetch_commons_research_briefings_traffic} downloads data showing the
-number of users, sessions, and pageviews for all Commons Library research
-briefings during the given dates and returns the data as a tibble. These are
-the landing pages for briefings whose codes begin with "SN" or "CBP".
+\code{fetch_commons_research_briefings_traffic} downloads data on traffic
+metrics for all Commons Library research briefings during the given dates
+and returns the data as a tibble. These are the landing pages for briefings
+whose codes begin with "SN" or "CBP".
 }
 \details{
 Note that this is not all research briefings traffic, as it does not include

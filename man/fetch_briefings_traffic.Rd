@@ -4,22 +4,27 @@
 \alias{fetch_briefings_traffic}
 \title{Download traffic data for all pages in the research briefings view}
 \usage{
-fetch_briefings_traffic(start_date, end_date, dim_filters = NULL)
+fetch_briefings_traffic(start_date, end_date, detailed = FALSE,
+  dim_filters = NULL)
 }
 \arguments{
 \item{start_date}{The start date as an ISO 8601 string.}
 
 \item{end_date}{The end date as an ISO 8601 string.}
 
-\item{dim_filters}{A set of dimension filters to constrain the results.}
+\item{detailed}{A boolean indicating whether to return the results by date
+in total, or broken down by individual page. The default is FALSE.}
+
+\item{dim_filters}{A set of dimension filters to constrain the results. The
+default is NULL.}
 }
 \value{
-A tibble of users, sessions, and pageviews by date.
+A tibble of traffic metrics.
 }
 \description{
-\code{fetch_briefings_traffic} downloads data showing the number of users,
-sessions, and pageviews for all research briefings under the research
-briefings view during the given dates and returns the data as a tibble.
+\code{fetch_briefings_traffic} downloads data on traffic metrics for all
+research briefings under the research briefings view during the given dates
+and returns the data as a tibble.
 }
 \details{
 Note that this is not all research briefings traffic, as it does not include
