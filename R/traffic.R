@@ -30,9 +30,8 @@ fetch_traffic <- function(
             dim_filters = dim_filters,
             max = -1) %>%
         tibble::as_tibble() %>%
-        dplyr::rename(
-            page_path = .data$pagePath,
-            upageviews = .data$uniquePageviews)
+        dplyr::rename(upageviews = .data$uniquePageviews) %>%
+        janitor::clean_names(case = "snake")
 }
 
 #' Download traffic data for all pages in the research briefings view
