@@ -414,42 +414,76 @@ fetch_rb_traffic <- function(
 #' @param url The URL of a page for which traffic data is requested.
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
+#' @param internal A boolean indicating whether to return only the results for
+#'   traffic from internal parliamentary networks. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
-fetch_traffic_for_rb_public <- function(url, start_date, end_date) {
+fetch_traffic_for_rb_public <- function(
+    url,
+    start_date,
+    end_date,
+    internal = FALSE) {
 
     start <- as.Date(start_date)
     end <- as.Date(end_date)
     if (end < start) stop("The start_date is later than the end_date")
 
+    page_path <- get_path(url)
+
+    path_filter <- googleAnalyticsR::dim_filter(
+        "pagePath",
+        "BEGINS_WITH",
+        page_path)
+
+    network_filter <- googleAnalyticsR::dim_filter(
+        "networkLocation",
+        "REGEXP",
+        NETWORK_REGEXP_INTERNAL)
+
+    filters <- list(path_filter)
+    if (internal) filters <- list(path_filter, network_filter)
+
+    dim_filters <- googleAnalyticsR::filter_clause_ga4(
+        filters, operator = "AND")
+
     if (end < as.Date(DATE_START_RB_NEW)) {
-        return(fetch_traffic_for_page(
-            url,
-            VIEW_ID_RB_OLD,
-            start_date,
-            end_date))
+
+        traffic <- fetch_traffic(
+            view_id = VIEW_ID_RB_OLD,
+            start_date = start_date,
+            end_date = end_date,
+            dim_filters = dim_filters)
+
+    } else if (start > as.Date(DATE_END_RB_OLD)) {
+
+        traffic <- fetch_traffic(
+            view_id = VIEW_ID_RB_NEW,
+            start_date = start_date,
+            end_date = end_date,
+            dim_filters = dim_filters)
+
+    } else {
+
+        traffic <- dplyr::bind_rows(
+            fetch_traffic(
+                view_id = VIEW_ID_RB_OLD,
+                start_date = start_date,
+                end_date = DATE_END_RB_OLD,
+                dim_filters = dim_filters),
+            fetch_traffic(
+                view_id = VIEW_ID_RB_NEW,
+                start_date = DATE_START_RB_NEW,
+                end_date = end_date,
+                dim_filters = dim_filters))
     }
 
-    if (start > as.Date(DATE_END_RB_OLD)) {
-        return(fetch_traffic_for_page(
-            url,
-            VIEW_ID_RB_NEW,
-            start_date,
-            end_date))
-    }
-
-    dplyr::bind_rows(
-        fetch_traffic_for_page(
-            url,
-            VIEW_ID_RB_OLD,
-            start_date,
-            DATE_END_RB_OLD),
-        fetch_traffic_for_page(
-            url,
-            VIEW_ID_RB_NEW,
-            DATE_START_RB_NEW,
-            end_date))
+    traffic %>%
+        dplyr::mutate(page_path = page_path) %>%
+        dplyr::select(
+            .data$date,
+            .data$page_path,
+            dplyr::everything())
 }
 
 # Individual pages: Intranet --------------------------------------------------
@@ -467,15 +501,103 @@ fetch_traffic_for_rb_public <- function(url, start_date, end_date) {
 #' @return A tibble of traffic metrics.
 #' @export
 
-fetch_traffic_for_rb_intranet <- function(url, start_date, end_date) {
+fetch_traffic_for_rb_intranet <- function(
+    url,
+    start_date,
+    end_date) {
 
     start <- as.Date(start_date)
     end <- as.Date(end_date)
     if (end < start) stop("The start_date is later than the end_date")
 
-    return(fetch_traffic_for_page(
-        url,
-        VIEW_ID_RB_INTRANET,
-        start_date,
-        end_date))
+    page_path <- get_path(url)
+
+    path_filter <- googleAnalyticsR::dim_filter(
+        "pagePath",
+        "BEGINS_WITH",
+        page_path)
+
+    filters <- list(path_filter)
+
+    dim_filters <- googleAnalyticsR::filter_clause_ga4(
+        filters, operator = "AND")
+
+    fetch_traffic(
+            view_id = VIEW_ID_RB_INTRANET,
+            start_date = start_date,
+            end_date = end_date,
+            dim_filters = dim_filters) %>%
+        dplyr::mutate(page_path = page_path) %>%
+        dplyr::select(
+            .data$date,
+            .data$page_path,
+            dplyr::everything())
+}
+
+# Individual pages: All research briefings (Parliament website and Intranet) ---
+
+#' Download traffic data for a research briefing with the given URL on the main
+#' Parliament website and the Parliamentary intranet
+#'
+#' \code{fetch_traffic_for_rb} downloads data on traffic metrics for a given
+#' research briefing url on both the main Parliament website and the
+#' Parliamentary intranet during the given dates and returns the data as a
+#' tibble.
+#'
+#' The data can either be combined so that each result appears once with
+#' totals across both the Parliament website and the intranet, or reported
+#' separately with separate rows for the website and the intranet.
+#'
+#' @param url The URL of a page for which traffic data is requested.
+#' @param start_date The start date as an ISO 8601 string.
+#' @param end_date The end date as an ISO 8601 string.
+#' @param internal A boolean indicating whether to return only the results for
+#'   traffic from internal parliamentary networks. The default is FALSE.
+#' @param combined A boolean indicating whether to combine the totals from
+#'   the website and the intranet or to report them separately. The default is
+#'   TRUE.
+#' @return A tibble of traffic metrics.
+#' @export
+
+fetch_traffic_for_rb <- function(
+    url,
+    start_date,
+    end_date,
+    internal = FALSE,
+    combined = TRUE) {
+
+    public <- fetch_traffic_for_rb_public(
+        url = url,
+        start_date = start_date,
+        end_date = end_date,
+        internal = internal)
+
+    intranet <- fetch_traffic_for_rb_intranet(
+        url = url,
+        start_date = start_date,
+        end_date = end_date)
+
+    if (combined) {
+
+        dplyr::bind_rows(public, intranet) %>%
+            dplyr::group_by(.data$date, .data$page_path) %>%
+            dplyr::summarise(
+                users = sum(.data$users),
+                sessions = sum(.data$sessions),
+                pageviews = sum(.data$pageviews),
+                upageviews = sum(.data$upageviews))
+
+    } else {
+
+        public$website <- LABEL_PUBLIC
+        intranet$website <- LABEL_INTRANET
+
+        dplyr::bind_rows(public, intranet) %>%
+            dplyr::select(
+                .data$date,
+                .data$page_path,
+                .data$website,
+                dplyr::everything())
+    }
+
 }
