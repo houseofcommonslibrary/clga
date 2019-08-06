@@ -4,7 +4,8 @@
 \alias{fetch_rb_traffic_intranet}
 \title{Download traffic data for all pages in the research briefings intranet view}
 \usage{
-fetch_rb_traffic_intranet(start_date, end_date, detailed = FALSE)
+fetch_rb_traffic_intranet(start_date, end_date, detailed = FALSE,
+  merge_paths = FALSE)
 }
 \arguments{
 \item{start_date}{The start date as an ISO 8601 string.}
@@ -13,6 +14,14 @@ fetch_rb_traffic_intranet(start_date, end_date, detailed = FALSE)
 
 \item{detailed}{A boolean indicating whether to return the results by date
 in total, or broken down by date and page. The default is FALSE.}
+
+\item{merge_paths}{A boolean indicating whether to aggregate metrics for all
+pages that have the same path i.e. for all pages whose paths differ only
+by their query string. Note that while merging paths is necessary for
+analysis of individual pages it can introduce small errors in the number
+of users by page, as the same user may visit the same page through URLs
+with different query strings. This parameter is ignored if \code{detailed}
+is set to FALSE. The default value is FALSE.}
 }
 \value{
 A tibble of traffic metrics.

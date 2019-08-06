@@ -18,8 +18,6 @@ fetch_traffic(view_id, start_date, end_date, dimensions = c("date"),
 
 \item{dim_filters}{A set of dimension filters to constrain the results. The
 default is NULL.}
-
-\item{end_date}{The end date as an ISO 8601 string.}
 }
 \value{
 A tibble of traffic metrics.

@@ -6,7 +6,7 @@
 Parliament website and the Parliamentary intranet}
 \usage{
 fetch_traffic_for_rb(url, start_date, end_date, internal = FALSE,
-  combined = TRUE)
+  combined = FALSE)
 }
 \arguments{
 \item{url}{The URL of a page for which traffic data is requested.}
@@ -19,8 +19,10 @@ fetch_traffic_for_rb(url, start_date, end_date, internal = FALSE,
 traffic from internal parliamentary networks. The default is FALSE.}
 
 \item{combined}{A boolean indicating whether to combine the totals from
-the website and the intranet or to report them separately. The default is
-TRUE.}
+the website and the intranet or to report them separately. Note that
+combining the traffic across both properties can introduce errors in
+the number of users, as the same user may visit pages on both properties.
+The default is FALSE.}
 }
 \value{
 A tibble of traffic metrics.

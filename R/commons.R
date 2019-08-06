@@ -21,6 +21,13 @@
 #'   traffic from internal parliamentary networks. The default is FALSE.
 #' @param detailed A boolean indicating whether to return the results by date
 #'   in total, or broken down by date and page. The default is FALSE.
+#' @param merge_paths A boolean indicating whether to aggregate metrics for all
+#'   pages that have the same path i.e. for all pages whose paths differ only
+#'   by their query string. Note that while merging paths is necessary for
+#'   analysis of individual pages it can introduce small errors in the number
+#'   of users by page, as the same user may visit the same page through URLs
+#'   with different query strings. This parameter is ignored if \code{detailed}
+#'   is set to FALSE. The default value is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -28,14 +35,16 @@ fetch_crb_traffic_public <- function(
     start_date,
     end_date,
     internal = FALSE,
-    detailed = FALSE) {
+    detailed = FALSE,
+    merge_paths = FALSE) {
 
     fetch_rb_traffic_public_by_type(
         type_regexp = PATH_REGEXP_RB_CRB,
         start_date = start_date,
         end_date = end_date,
         internal = internal,
-        detailed = detailed)
+        detailed = detailed,
+        merge_paths = merge_paths)
 }
 
 #' Download traffic data for all Commons briefing paper landing pages on the
@@ -57,6 +66,13 @@ fetch_crb_traffic_public <- function(
 #'   traffic from internal parliamentary networks. The default is FALSE.
 #' @param detailed A boolean indicating whether to return the results by date
 #'   in total, or broken down by date and page. The default is FALSE.
+#' @param merge_paths A boolean indicating whether to aggregate metrics for all
+#'   pages that have the same path i.e. for all pages whose paths differ only
+#'   by their query string. Note that while merging paths is necessary for
+#'   analysis of individual pages it can introduce small errors in the number
+#'   of users by page, as the same user may visit the same page through URLs
+#'   with different query strings. This parameter is ignored if \code{detailed}
+#'   is set to FALSE. The default value is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -64,14 +80,16 @@ fetch_cbp_traffic_public <- function(
     start_date,
     end_date,
     internal = FALSE,
-    detailed = FALSE) {
+    detailed = FALSE,
+    merge_paths = FALSE) {
 
     fetch_rb_traffic_public_by_type(
         type_regexp = PATH_REGEXP_RB_CBP,
         start_date = start_date,
         end_date = end_date,
         internal = internal,
-        detailed = detailed)
+        detailed = detailed,
+        merge_paths = merge_paths)
 }
 
 #' Download traffic data for all Commons debate pack landing pages on the main
@@ -93,6 +111,13 @@ fetch_cbp_traffic_public <- function(
 #'   traffic from internal parliamentary networks. The default is FALSE.
 #' @param detailed A boolean indicating whether to return the results by date
 #'   in total, or broken down by date and page. The default is FALSE.
+#' @param merge_paths A boolean indicating whether to aggregate metrics for all
+#'   pages that have the same path i.e. for all pages whose paths differ only
+#'   by their query string. Note that while merging paths is necessary for
+#'   analysis of individual pages it can introduce small errors in the number
+#'   of users by page, as the same user may visit the same page through URLs
+#'   with different query strings. This parameter is ignored if \code{detailed}
+#'   is set to FALSE. The default value is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -100,14 +125,16 @@ fetch_cdp_traffic_public <- function(
     start_date,
     end_date,
     internal = FALSE,
-    detailed = FALSE) {
+    detailed = FALSE,
+    merge_paths = FALSE) {
 
     fetch_rb_traffic_public_by_type(
         type_regexp = PATH_REGEXP_RB_CDP,
         start_date = start_date,
         end_date = end_date,
         internal = internal,
-        detailed = detailed)
+        detailed = detailed,
+        merge_paths = merge_paths)
 }
 
 # Sets of pages: Intranet -----------------------------------------------------
@@ -129,19 +156,28 @@ fetch_cdp_traffic_public <- function(
 #' @param end_date The end date as an ISO 8601 string.
 #' @param detailed A boolean indicating whether to return the results by date
 #'   in total, or broken down by date and page. The default is FALSE.
+#' @param merge_paths A boolean indicating whether to aggregate metrics for all
+#'   pages that have the same path i.e. for all pages whose paths differ only
+#'   by their query string. Note that while merging paths is necessary for
+#'   analysis of individual pages it can introduce small errors in the number
+#'   of users by page, as the same user may visit the same page through URLs
+#'   with different query strings. This parameter is ignored if \code{detailed}
+#'   is set to FALSE. The default value is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
 fetch_crb_traffic_intranet <- function(
     start_date,
     end_date,
-    detailed = FALSE) {
+    detailed = FALSE,
+    merge_paths = FALSE) {
 
     fetch_rb_traffic_intranet_by_type(
         type_regexp = PATH_REGEXP_RB_CRB,
         start_date = start_date,
         end_date = end_date,
-        detailed = detailed)
+        detailed = detailed,
+        merge_paths = merge_paths)
 }
 
 #' Download traffic data for all Commons briefing paper landing pages on
@@ -161,19 +197,28 @@ fetch_crb_traffic_intranet <- function(
 #' @param end_date The end date as an ISO 8601 string.
 #' @param detailed A boolean indicating whether to return the results by date
 #'   in total, or broken down by date and page. The default is FALSE.
+#' @param merge_paths A boolean indicating whether to aggregate metrics for all
+#'   pages that have the same path i.e. for all pages whose paths differ only
+#'   by their query string. Note that while merging paths is necessary for
+#'   analysis of individual pages it can introduce small errors in the number
+#'   of users by page, as the same user may visit the same page through URLs
+#'   with different query strings. This parameter is ignored if \code{detailed}
+#'   is set to FALSE. The default value is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
 fetch_cbp_traffic_intranet <- function(
     start_date,
     end_date,
-    detailed = FALSE) {
+    detailed = FALSE,
+    merge_paths = FALSE) {
 
     fetch_rb_traffic_intranet_by_type(
         type_regexp = PATH_REGEXP_RB_CBP,
         start_date = start_date,
         end_date = end_date,
-        detailed = detailed)
+        detailed = detailed,
+        merge_paths = merge_paths)
 }
 
 #' Download traffic data for all Commons debate pack landing pages on the
@@ -193,22 +238,31 @@ fetch_cbp_traffic_intranet <- function(
 #' @param end_date The end date as an ISO 8601 string.
 #' @param detailed A boolean indicating whether to return the results by date
 #'   in total, or broken down by date and page. The default is FALSE.
+#' @param merge_paths A boolean indicating whether to aggregate metrics for all
+#'   pages that have the same path i.e. for all pages whose paths differ only
+#'   by their query string. Note that while merging paths is necessary for
+#'   analysis of individual pages it can introduce small errors in the number
+#'   of users by page, as the same user may visit the same page through URLs
+#'   with different query strings. This parameter is ignored if \code{detailed}
+#'   is set to FALSE. The default value is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
 fetch_cdp_traffic_intranet <- function(
     start_date,
     end_date,
-    detailed = FALSE) {
+    detailed = FALSE,
+    merge_paths = FALSE) {
 
     fetch_rb_traffic_intranet_by_type(
         type_regexp = PATH_REGEXP_RB_CDP,
         start_date = start_date,
         end_date = end_date,
-        detailed = detailed)
+        detailed = detailed,
+        merge_paths = merge_paths)
 }
 
-# Sets of pages: All research briefings (Parliament website and Intranet) -----
+# Sets of pages: All research briefings ---------------------------------------
 
 #' Download traffic data for all Commons research briefings in both the
 #' research briefings view and the research briefings intranet view
@@ -228,9 +282,18 @@ fetch_cdp_traffic_intranet <- function(
 #'   traffic from internal parliamentary networks. The default is FALSE.
 #' @param detailed A boolean indicating whether to return the results by date
 #'   in total, or broken down by individual page. The default is FALSE.
+#' @param merge_paths A boolean indicating whether to aggregate metrics for all
+#'   pages that have the same path i.e. for all pages whose paths differ only
+#'   by their query string. Note that while merging paths is necessary for
+#'   analysis of individual pages it can introduce small errors in the number
+#'   of users by page, as the same user may visit the same page through URLs
+#'   with different query strings. This parameter is ignored if \code{detailed}
+#'   is set to FALSE. The default value is FALSE.
 #' @param combined A boolean indicating whether to combine the totals from
-#'   the website and the intranet or to report them separately. The default is
-#'   TRUE.
+#'   the website and the intranet or to report them separately. Note that
+#'   combining the traffic across both properties can introduce errors in
+#'   the number of users, as the same user may visit pages on both properties.
+#'   The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -239,7 +302,8 @@ fetch_crb_traffic <- function(
     end_date,
     internal = FALSE,
     detailed = FALSE,
-    combined = TRUE) {
+    merge_paths = FALSE,
+    combined = FALSE) {
 
     fetch_rb_traffic_all_sources(
         fetch_crb_traffic_public,
@@ -248,6 +312,7 @@ fetch_crb_traffic <- function(
         end_date = end_date,
         internal = internal,
         detailed = detailed,
+        merge_paths = merge_paths,
         combined = combined)
 }
 
@@ -268,9 +333,18 @@ fetch_crb_traffic <- function(
 #'   traffic from internal parliamentary networks. The default is FALSE.
 #' @param detailed A boolean indicating whether to return the results by date
 #'   in total, or broken down by individual page. The default is FALSE.
+#' @param merge_paths A boolean indicating whether to aggregate metrics for all
+#'   pages that have the same path i.e. for all pages whose paths differ only
+#'   by their query string. Note that while merging paths is necessary for
+#'   analysis of individual pages it can introduce small errors in the number
+#'   of users by page, as the same user may visit the same page through URLs
+#'   with different query strings. This parameter is ignored if \code{detailed}
+#'   is set to FALSE. The default value is FALSE.
 #' @param combined A boolean indicating whether to combine the totals from
-#'   the website and the intranet or to report them separately. The default is
-#'   TRUE.
+#'   the website and the intranet or to report them separately. Note that
+#'   combining the traffic across both properties can introduce errors in
+#'   the number of users, as the same user may visit pages on both properties.
+#'   The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -279,7 +353,8 @@ fetch_cbp_traffic <- function(
     end_date,
     internal = FALSE,
     detailed = FALSE,
-    combined = TRUE) {
+    merge_paths = FALSE,
+    combined = FALSE) {
 
     fetch_rb_traffic_all_sources(
         fetch_cbp_traffic_public,
@@ -288,6 +363,7 @@ fetch_cbp_traffic <- function(
         end_date = end_date,
         internal = internal,
         detailed = detailed,
+        merge_paths = merge_paths,
         combined = combined)
 }
 
@@ -308,9 +384,18 @@ fetch_cbp_traffic <- function(
 #'   traffic from internal parliamentary networks. The default is FALSE.
 #' @param detailed A boolean indicating whether to return the results by date
 #'   in total, or broken down by individual page. The default is FALSE.
+#' @param merge_paths A boolean indicating whether to aggregate metrics for all
+#'   pages that have the same path i.e. for all pages whose paths differ only
+#'   by their query string. Note that while merging paths is necessary for
+#'   analysis of individual pages it can introduce small errors in the number
+#'   of users by page, as the same user may visit the same page through URLs
+#'   with different query strings. This parameter is ignored if \code{detailed}
+#'   is set to FALSE. The default value is FALSE.
 #' @param combined A boolean indicating whether to combine the totals from
-#'   the website and the intranet or to report them separately. The default is
-#'   TRUE.
+#'   the website and the intranet or to report them separately. Note that
+#'   combining the traffic across both properties can introduce errors in
+#'   the number of users, as the same user may visit pages on both properties.
+#'   The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -319,7 +404,8 @@ fetch_cdp_traffic <- function(
     end_date,
     internal = FALSE,
     detailed = FALSE,
-    combined = TRUE) {
+    merge_paths = FALSE,
+    combined = FALSE) {
 
     fetch_rb_traffic_all_sources(
         fetch_cdp_traffic_public,
@@ -328,5 +414,6 @@ fetch_cdp_traffic <- function(
         end_date = end_date,
         internal = internal,
         detailed = detailed,
+        merge_paths = merge_paths,
         combined = combined)
 }

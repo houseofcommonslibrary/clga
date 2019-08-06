@@ -6,7 +6,7 @@
 research briefings view and the research briefings intranet view}
 \usage{
 fetch_cbp_traffic(start_date, end_date, internal = FALSE,
-  detailed = FALSE, combined = TRUE)
+  detailed = FALSE, merge_paths = FALSE, combined = FALSE)
 }
 \arguments{
 \item{start_date}{The start date as an ISO 8601 string.}
@@ -19,9 +19,19 @@ traffic from internal parliamentary networks. The default is FALSE.}
 \item{detailed}{A boolean indicating whether to return the results by date
 in total, or broken down by individual page. The default is FALSE.}
 
+\item{merge_paths}{A boolean indicating whether to aggregate metrics for all
+pages that have the same path i.e. for all pages whose paths differ only
+by their query string. Note that while merging paths is necessary for
+analysis of individual pages it can introduce small errors in the number
+of users by page, as the same user may visit the same page through URLs
+with different query strings. This parameter is ignored if \code{detailed}
+is set to FALSE. The default value is FALSE.}
+
 \item{combined}{A boolean indicating whether to combine the totals from
-the website and the intranet or to report them separately. The default is
-TRUE.}
+the website and the intranet or to report them separately. Note that
+combining the traffic across both properties can introduce errors in
+the number of users, as the same user may visit pages on both properties.
+The default is FALSE.}
 }
 \value{
 A tibble of traffic metrics.

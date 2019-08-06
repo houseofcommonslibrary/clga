@@ -6,7 +6,7 @@
 given filters}
 \usage{
 fetch_rb_traffic_public_by_filter(start_date, end_date, detailed = FALSE,
-  dim_filters = NULL)
+  merge_paths = FALSE, dim_filters = NULL)
 }
 \arguments{
 \item{start_date}{The start date as an ISO 8601 string.}
@@ -15,6 +15,14 @@ fetch_rb_traffic_public_by_filter(start_date, end_date, detailed = FALSE,
 
 \item{detailed}{A boolean indicating whether to return the results by date
 in total, or broken down by individual page. The default is FALSE.}
+
+\item{merge_paths}{A boolean indicating whether to aggregate metrics for all
+pages that have the same path i.e. for all pages whose paths differ only
+by their query string. Note that while merging paths is necessary for
+analysis of individual pages it can introduce small errors in the number
+of users by page, as the same user may visit the same page through URLs
+with different query strings. This parameter is ignored if \code{detailed}
+is set to FALSE. The default value is FALSE.}
 
 \item{dim_filters}{A set of dimension filters to constrain the results. The
 default is NULL.}
