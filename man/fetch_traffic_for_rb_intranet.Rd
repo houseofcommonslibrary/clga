@@ -5,7 +5,7 @@
 \title{Download traffic data for a research briefing with the given URL on the
 Parliamentary intranet}
 \usage{
-fetch_traffic_for_rb_intranet(url, start_date, end_date)
+fetch_traffic_for_rb_intranet(url, start_date, end_date, by_date = FALSE)
 }
 \arguments{
 \item{url}{The URL of a page for which traffic data is requested.}
@@ -13,6 +13,9 @@ fetch_traffic_for_rb_intranet(url, start_date, end_date)
 \item{start_date}{The start date as an ISO 8601 string.}
 
 \item{end_date}{The end date as an ISO 8601 string.}
+
+\item{by_date}{A boolean indicating whether to return the results broken
+down by date. The default is FALSE.}
 }
 \value{
 A tibble of traffic metrics.

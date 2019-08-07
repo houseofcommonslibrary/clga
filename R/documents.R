@@ -29,8 +29,5 @@ fetch_downloads <- function(
             dim_filters = dim_filters,
             max = -1) %>%
         tibble::as_tibble() %>%
-        dplyr::rename(
-            downloads = .data$totalEvents,
-            udownloads = .data$uniqueEvents) %>%
         janitor::clean_names(case = "snake")
 }

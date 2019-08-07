@@ -11,6 +11,8 @@
 #'
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
+#' @param by_date A boolean indicating whether to return the results broken
+#'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
 #'   down by individual page. The default is FALSE.
 #' @param merge_paths A boolean indicating whether to aggregate metrics for all
@@ -28,6 +30,7 @@
 fetch_ms_traffic_by_filter <- function(
     start_date,
     end_date,
+    by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE,
     dim_filters = NULL) {
@@ -36,8 +39,9 @@ fetch_ms_traffic_by_filter <- function(
     end <- as.Date(end_date)
     if (end < start) stop("The start_date is later than the end_date")
 
-    dimensions <- c("date")
-    if(by_page) dimensions <- c("date", "pagePath")
+    dimensions <- c()
+    if(by_date) dimensions <- c(dimensions, "date")
+    if(by_page) dimensions <- c(dimensions, "pagePath")
 
     traffic <- fetch_traffic(
         view_id = VIEW_ID_MS,
@@ -46,7 +50,7 @@ fetch_ms_traffic_by_filter <- function(
         dimensions = dimensions,
         dim_filters = dim_filters)
 
-    if (by_page && merge_paths) traffic <- merge_paths(traffic)
+    if (by_page && merge_paths) traffic <- merge_paths(traffic, by_date)
     traffic
 }
 
@@ -65,6 +69,8 @@ fetch_ms_traffic_by_filter <- function(
 #' @param end_date The end date as an ISO 8601 string.
 #' @param internal A boolean indicating whether to return only the results for
 #'   traffic from internal parliamentary networks. The default is FALSE.
+#' @param by_date A boolean indicating whether to return the results broken
+#'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
 #'   down by individual page. The default is FALSE.
 #' @param merge_paths A boolean indicating whether to aggregate metrics for all
@@ -82,6 +88,7 @@ fetch_ms_traffic_by_type <- function(
     start_date,
     end_date,
     internal = FALSE,
+    by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE) {
 
@@ -104,6 +111,7 @@ fetch_ms_traffic_by_type <- function(
     fetch_ms_traffic_by_filter(
         start_date = start_date,
         end_date = end_date,
+        by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths,
         dim_filters = dim_filters)
@@ -119,6 +127,8 @@ fetch_ms_traffic_by_type <- function(
 #' @param end_date The end date as an ISO 8601 string.
 #' @param internal A boolean indicating whether to return only the results for
 #'   traffic from internal parliamentary networks. The default is FALSE.
+#' @param by_date A boolean indicating whether to return the results broken
+#'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
 #'   down by individual page. The default is FALSE.
 #' @param merge_paths A boolean indicating whether to aggregate metrics for all
@@ -135,6 +145,7 @@ fetch_ms_traffic <- function(
     start_date,
     end_date,
     internal = FALSE,
+    by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE) {
 
@@ -143,6 +154,7 @@ fetch_ms_traffic <- function(
         start_date = start_date,
         end_date = end_date,
         internal = internal,
+        by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths)
 }
@@ -161,6 +173,8 @@ fetch_ms_traffic <- function(
 #' @param end_date The end date as an ISO 8601 string.
 #' @param internal A boolean indicating whether to return only the results for
 #'   traffic from internal parliamentary networks. The default is FALSE.
+#' @param by_date A boolean indicating whether to return the results broken
+#'   down by date. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -168,11 +182,15 @@ fetch_traffic_for_ms <- function(
     url,
     start_date,
     end_date,
-    internal = FALSE) {
+    internal = FALSE,
+    by_date = FALSE) {
 
     start <- as.Date(start_date)
     end <- as.Date(end_date)
     if (end < start) stop("The start_date is later than the end_date")
+
+    dimensions <- c()
+    if (by_date) dimensions <- c(dimensions, "date")
 
     page_path <- get_path_from_url(url)
 
@@ -192,14 +210,29 @@ fetch_traffic_for_ms <- function(
     dim_filters <- googleAnalyticsR::filter_clause_ga4(
         filters, operator = "AND")
 
-    fetch_traffic(
+    traffic <- fetch_traffic(
             view_id = VIEW_ID_MS,
             start_date = start_date,
             end_date = end_date,
-            dim_filters = dim_filters) %>%
-        dplyr::mutate(page_path = page_path) %>%
-        dplyr::select(
-            .data$date,
-            .data$page_path,
-            dplyr::everything())
+            dimensions = dimensions,
+            dim_filters = dim_filters)
+
+    if (nrow(traffic) == 0) return(traffic)
+
+    traffic <- traffic %>% dplyr::mutate(page_path = page_path)
+
+    if (by_date) {
+        traffic <- traffic %>%
+            dplyr::select(
+                .data$date,
+                .data$page_path,
+                dplyr::everything())
+    } else {
+        traffic <- traffic %>%
+            dplyr::select(
+                .data$page_path,
+                dplyr::everything())
+    }
+
+    traffic
 }

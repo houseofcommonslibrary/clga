@@ -6,7 +6,7 @@
 Parliament website and the Parliamentary intranet}
 \usage{
 fetch_traffic_for_rb(url, start_date, end_date, internal = FALSE,
-  combined = FALSE)
+  by_date = FALSE, combined = FALSE)
 }
 \arguments{
 \item{url}{The URL of a page for which traffic data is requested.}
@@ -17,6 +17,9 @@ fetch_traffic_for_rb(url, start_date, end_date, internal = FALSE,
 
 \item{internal}{A boolean indicating whether to return only the results for
 traffic from internal parliamentary networks. The default is FALSE.}
+
+\item{by_date}{A boolean indicating whether to return the results broken
+down by date. The default is FALSE.}
 
 \item{combined}{A boolean indicating whether to combine the totals from
 the website and the intranet or to report them separately. Note that

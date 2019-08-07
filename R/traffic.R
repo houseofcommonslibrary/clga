@@ -10,7 +10,7 @@
 #' @param view_id The view id in Google Analytics
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
-#' @param dimensions A vector of dimensions to return. The default is "date".
+#' @param dimensions A vector of dimensions to return. The default is NULL.
 #' @param dim_filters A set of dimension filters to constrain the results. The
 #'   default is NULL.
 #' @return A tibble of traffic metrics.
@@ -20,7 +20,7 @@ fetch_traffic <- function(
     view_id,
     start_date,
     end_date,
-    dimensions = c("date"),
+    dimensions = NULL,
     dim_filters = NULL) {
 
     googleAnalyticsR::google_analytics(
@@ -31,6 +31,5 @@ fetch_traffic <- function(
             dim_filters = dim_filters,
             max = -1) %>%
         tibble::as_tibble() %>%
-        dplyr::rename(upageviews = .data$uniquePageviews) %>%
         janitor::clean_names(case = "snake")
 }

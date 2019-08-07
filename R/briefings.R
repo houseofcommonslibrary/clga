@@ -16,8 +16,10 @@
 #'
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
+#' @param by_date A boolean indicating whether to return the results broken
+#'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
-#'   down by individual page. The default is FALSE.
+#'   down by page. The default is FALSE.
 #' @param merge_paths A boolean indicating whether to aggregate metrics for all
 #'   pages that have the same root path i.e. for all pages whose paths differ
 #'   only by their query string. This parameter is ignored if \code{by_page} is
@@ -33,6 +35,7 @@
 fetch_rb_traffic_public_by_filter <- function(
     start_date,
     end_date,
+    by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE,
     dim_filters = NULL) {
@@ -41,8 +44,9 @@ fetch_rb_traffic_public_by_filter <- function(
     end <- as.Date(end_date)
     if (end < start) stop("The start_date is later than the end_date")
 
-    dimensions <- c("date")
-    if(by_page) dimensions <- c("date", "pagePath")
+    dimensions <- c()
+    if (by_date) dimensions <- c(dimensions, "date")
+    if (by_page) dimensions <- c(dimensions, "pagePath")
 
     if (end < as.Date(DATE_START_RB_NEW)) {
 
@@ -79,7 +83,7 @@ fetch_rb_traffic_public_by_filter <- function(
                 dim_filters = dim_filters))
     }
 
-    if (by_page && merge_paths) traffic <- merge_paths(traffic)
+    if (by_page && merge_paths) traffic <- merge_paths(traffic, by_date)
     traffic
 }
 
@@ -102,8 +106,10 @@ fetch_rb_traffic_public_by_filter <- function(
 #' @param end_date The end date as an ISO 8601 string.
 #' @param internal A boolean indicating whether to return only the results for
 #'   traffic from internal parliamentary networks. The default is FALSE.
+#' @param by_date A boolean indicating whether to return the results broken
+#'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
-#'   down by individual page. The default is FALSE.
+#'   down by page. The default is FALSE.
 #' @param merge_paths A boolean indicating whether to aggregate metrics for all
 #'   pages that have the same root path i.e. for all pages whose paths differ
 #'   only by their query string. This parameter is ignored if \code{by_page} is
@@ -119,6 +125,7 @@ fetch_rb_traffic_public_by_type <- function(
     start_date,
     end_date,
     internal = FALSE,
+    by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE) {
 
@@ -141,6 +148,7 @@ fetch_rb_traffic_public_by_type <- function(
     fetch_rb_traffic_public_by_filter(
         start_date = start_date,
         end_date = end_date,
+        by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths,
         dim_filters = dim_filters)
@@ -161,8 +169,10 @@ fetch_rb_traffic_public_by_type <- function(
 #' @param end_date The end date as an ISO 8601 string.
 #' @param internal A boolean indicating whether to return only the results for
 #'   traffic from internal parliamentary networks. The default is FALSE.
+#' @param by_date A boolean indicating whether to return the results broken
+#'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
-#'   down by individual page. The default is FALSE.
+#'   down by page. The default is FALSE.
 #' @param merge_paths A boolean indicating whether to aggregate metrics for all
 #'   pages that have the same root path i.e. for all pages whose paths differ
 #'   only by their query string. This parameter is ignored if \code{by_page} is
@@ -177,6 +187,7 @@ fetch_rb_traffic_public <- function(
     start_date,
     end_date,
     internal = FALSE,
+    by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE) {
 
@@ -185,6 +196,7 @@ fetch_rb_traffic_public <- function(
         start_date = start_date,
         end_date = end_date,
         internal = internal,
+        by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths)
 }
@@ -205,8 +217,10 @@ fetch_rb_traffic_public <- function(
 #'
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
+#' @param by_date A boolean indicating whether to return the results broken
+#'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
-#'   down by individual page. The default is FALSE.
+#'   down by page. The default is FALSE.
 #' @param merge_paths A boolean indicating whether to aggregate metrics for all
 #'   pages that have the same root path i.e. for all pages whose paths differ
 #'   only by their query string. This parameter is ignored if \code{by_page} is
@@ -222,6 +236,7 @@ fetch_rb_traffic_public <- function(
 fetch_rb_traffic_intranet_by_filter <- function(
     start_date,
     end_date,
+    by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE,
     dim_filters = NULL) {
@@ -230,8 +245,9 @@ fetch_rb_traffic_intranet_by_filter <- function(
     end <- as.Date(end_date)
     if (end < start) stop("The start_date is later than the end_date")
 
-    dimensions <- c("date")
-    if (by_page) dimensions <- c("date", "pagePath")
+    dimensions <- c()
+    if (by_date) dimensions <- c(dimensions, "date")
+    if (by_page) dimensions <- c(dimensions, "pagePath")
 
     traffic <- fetch_traffic(
         view_id = VIEW_ID_RB_INTRANET,
@@ -240,7 +256,7 @@ fetch_rb_traffic_intranet_by_filter <- function(
         dimensions = dimensions,
         dim_filters = dim_filters)
 
-    if (by_page && merge_paths) traffic <- merge_paths(traffic)
+    if (by_page && merge_paths) traffic <- merge_paths(traffic, by_date)
     traffic
 }
 
@@ -261,8 +277,10 @@ fetch_rb_traffic_intranet_by_filter <- function(
 #'   one or more briefing types.
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
+#' @param by_date A boolean indicating whether to return the results broken
+#'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
-#'   down by individual page. The default is FALSE.
+#'   down by page. The default is FALSE.
 #' @param merge_paths A boolean indicating whether to aggregate metrics for all
 #'   pages that have the same root path i.e. for all pages whose paths differ
 #'   only by their query string. This parameter is ignored if \code{by_page} is
@@ -277,6 +295,7 @@ fetch_rb_traffic_intranet_by_type <- function(
     type_regexp,
     start_date,
     end_date,
+    by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE) {
 
@@ -291,6 +310,7 @@ fetch_rb_traffic_intranet_by_type <- function(
     fetch_rb_traffic_intranet_by_filter(
         start_date = start_date,
         end_date = end_date,
+        by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths,
         dim_filters = dim_filters)
@@ -309,8 +329,10 @@ fetch_rb_traffic_intranet_by_type <- function(
 
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
+#' @param by_date A boolean indicating whether to return the results broken
+#'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
-#'   down by individual page. The default is FALSE.
+#'   down by page. The default is FALSE.
 #' @param merge_paths A boolean indicating whether to aggregate metrics for all
 #'   pages that have the same root path i.e. for all pages whose paths differ
 #'   only by their query string. This parameter is ignored if \code{by_page} is
@@ -324,6 +346,7 @@ fetch_rb_traffic_intranet_by_type <- function(
 fetch_rb_traffic_intranet <- function(
     start_date,
     end_date,
+    by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE) {
 
@@ -331,6 +354,7 @@ fetch_rb_traffic_intranet <- function(
         type_regexp = PATH_REGEXP_ALL,
         start_date = start_date,
         end_date = end_date,
+        by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths)
 }
@@ -357,8 +381,10 @@ fetch_rb_traffic_intranet <- function(
 #' @param end_date The end date as an ISO 8601 string.
 #' @param internal A boolean indicating whether to return only the results for
 #'   traffic from internal parliamentary networks. The default is FALSE.
+#' @param by_date A boolean indicating whether to return the results broken
+#'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
-#'   down by individual page. The default is FALSE.
+#'   down by page. The default is FALSE.
 #' @param merge_paths A boolean indicating whether to aggregate metrics for all
 #'   pages that have the same root path i.e. for all pages whose paths differ
 #'   only by their query string. This parameter is ignored if \code{by_page} is
@@ -380,6 +406,7 @@ fetch_rb_traffic_all_sources <- function(
     start_date,
     end_date,
     internal = FALSE,
+    by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE,
     combined = FALSE) {
@@ -388,49 +415,81 @@ fetch_rb_traffic_all_sources <- function(
         start_date = start_date,
         end_date = end_date,
         internal = internal,
+        by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths)
 
     intranet <- fetch_intranet(
         start_date = start_date,
         end_date = end_date,
+        by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths)
 
     if (combined) {
 
-        if (by_page) {
-            all <- dplyr::bind_rows(public, intranet) %>%
-                dplyr::group_by(.data$date, .data$page_path)
+
+        if (by_date) {
+
+            if (by_page) {
+                all <- dplyr::bind_rows(public, intranet) %>%
+                    dplyr::group_by(.data$date, .data$page_path)
+            } else {
+                all <- dplyr::bind_rows(public, intranet) %>%
+                    dplyr::group_by(.data$date)
+            }
+
         } else {
-            all <- dplyr::bind_rows(public, intranet) %>%
-                dplyr::group_by(.data$date)
+
+            if (by_page) {
+                all <- dplyr::bind_rows(public, intranet) %>%
+                    dplyr::group_by(.data$page_path)
+            }
         }
 
         all %>% dplyr::summarise(
-            users = sum(.data$users),
-            sessions = sum(.data$sessions),
-            pageviews = sum(.data$pageviews),
-            upageviews = sum(.data$upageviews))
+                users = sum(.data$users),
+                sessions = sum(.data$sessions),
+                pageviews = sum(.data$pageviews),
+                unique_pageviews = sum(.data$unique_pageviews)) %>%
+            dplyr::ungroup()
 
     } else {
 
         public$website <- LABEL_PUBLIC
         intranet$website <- LABEL_INTRANET
 
-        if (by_page) {
-            dplyr::bind_rows(public, intranet) %>%
-                dplyr::select(
-                    .data$date,
-                    .data$page_path,
-                    .data$website,
-                    dplyr::everything())
+        if (by_date) {
+
+            if (by_page) {
+                dplyr::bind_rows(public, intranet) %>%
+                    dplyr::select(
+                        .data$date,
+                        .data$page_path,
+                        .data$website,
+                        dplyr::everything())
+            } else {
+                dplyr::bind_rows(public, intranet) %>%
+                    dplyr::select(
+                        .data$date,
+                        .data$website,
+                        dplyr::everything())
+            }
+
         } else {
-            dplyr::bind_rows(public, intranet) %>%
-                dplyr::select(
-                    .data$date,
-                    .data$website,
-                    dplyr::everything())
+
+            if (by_page) {
+                dplyr::bind_rows(public, intranet) %>%
+                    dplyr::select(
+                        .data$page_path,
+                        .data$website,
+                        dplyr::everything())
+            } else {
+                dplyr::bind_rows(public, intranet) %>%
+                    dplyr::select(
+                        .data$website,
+                        dplyr::everything())
+            }
         }
     }
 }
@@ -450,8 +509,10 @@ fetch_rb_traffic_all_sources <- function(
 #' @param end_date The end date as an ISO 8601 string.
 #' @param internal A boolean indicating whether to return only the results for
 #'   traffic from internal parliamentary networks. The default is FALSE.
+#' @param by_date A boolean indicating whether to return the results broken
+#'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
-#'   down by individual page. The default is FALSE.
+#'   down by page. The default is FALSE.
 #' @param merge_paths A boolean indicating whether to aggregate metrics for all
 #'   pages that have the same root path i.e. for all pages whose paths differ
 #'   only by their query string. This parameter is ignored if \code{by_page} is
@@ -471,6 +532,7 @@ fetch_rb_traffic <- function(
     start_date,
     end_date,
     internal = FALSE,
+    by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE,
     combined = FALSE) {
@@ -481,6 +543,7 @@ fetch_rb_traffic <- function(
         start_date = start_date,
         end_date = end_date,
         internal = internal,
+        by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths,
         combined = combined)
@@ -500,6 +563,8 @@ fetch_rb_traffic <- function(
 #' @param end_date The end date as an ISO 8601 string.
 #' @param internal A boolean indicating whether to return only the results for
 #'   traffic from internal parliamentary networks. The default is FALSE.
+#' @param by_date A boolean indicating whether to return the results broken
+#'   down by date. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -507,11 +572,15 @@ fetch_traffic_for_rb_public <- function(
     url,
     start_date,
     end_date,
-    internal = FALSE) {
+    internal = FALSE,
+    by_date = FALSE) {
 
     start <- as.Date(start_date)
     end <- as.Date(end_date)
     if (end < start) stop("The start_date is later than the end_date")
+
+    dimensions <- c()
+    if (by_date) dimensions <- c(dimensions, "date")
 
     page_path <- get_path_from_url(url)
 
@@ -537,6 +606,7 @@ fetch_traffic_for_rb_public <- function(
             view_id = VIEW_ID_RB_OLD,
             start_date = start_date,
             end_date = end_date,
+            dimensions = dimensions,
             dim_filters = dim_filters)
 
     } else if (start > as.Date(DATE_END_RB_OLD)) {
@@ -545,6 +615,7 @@ fetch_traffic_for_rb_public <- function(
             view_id = VIEW_ID_RB_NEW,
             start_date = start_date,
             end_date = end_date,
+            dimensions = dimensions,
             dim_filters = dim_filters)
 
     } else {
@@ -554,20 +625,34 @@ fetch_traffic_for_rb_public <- function(
                 view_id = VIEW_ID_RB_OLD,
                 start_date = start_date,
                 end_date = DATE_END_RB_OLD,
+                dimensions = dimensions,
                 dim_filters = dim_filters),
             fetch_traffic(
                 view_id = VIEW_ID_RB_NEW,
                 start_date = DATE_START_RB_NEW,
                 end_date = end_date,
+                dimensions = dimensions,
                 dim_filters = dim_filters))
     }
 
-    traffic %>%
-        dplyr::mutate(page_path = page_path) %>%
-        dplyr::select(
-            .data$date,
-            .data$page_path,
-            dplyr::everything())
+    if (nrow(traffic) == 0) return(traffic)
+
+    traffic <- traffic %>% dplyr::mutate(page_path = page_path)
+
+    if (by_date) {
+        traffic <- traffic %>%
+            dplyr::select(
+                .data$date,
+                .data$page_path,
+                dplyr::everything())
+    } else {
+        traffic <- traffic %>%
+            dplyr::select(
+                .data$page_path,
+                dplyr::everything())
+    }
+
+    traffic
 }
 
 # Individual pages: Intranet --------------------------------------------------
@@ -582,17 +667,23 @@ fetch_traffic_for_rb_public <- function(
 #' @param url The URL of a page for which traffic data is requested.
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
+#' @param by_date A boolean indicating whether to return the results broken
+#'   down by date. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
 fetch_traffic_for_rb_intranet <- function(
     url,
     start_date,
-    end_date) {
+    end_date,
+    by_date = FALSE) {
 
     start <- as.Date(start_date)
     end <- as.Date(end_date)
     if (end < start) stop("The start_date is later than the end_date")
+
+    dimensions <- c()
+    if (by_date) dimensions <- c(dimensions, "date")
 
     page_path <- get_path_from_url(url)
 
@@ -606,19 +697,34 @@ fetch_traffic_for_rb_intranet <- function(
     dim_filters <- googleAnalyticsR::filter_clause_ga4(
         filters, operator = "AND")
 
-    fetch_traffic(
+    traffic <- fetch_traffic(
             view_id = VIEW_ID_RB_INTRANET,
             start_date = start_date,
             end_date = end_date,
-            dim_filters = dim_filters) %>%
-        dplyr::mutate(page_path = page_path) %>%
-        dplyr::select(
-            .data$date,
-            .data$page_path,
-            dplyr::everything())
+            dimensions = dimensions,
+            dim_filters = dim_filters)
+
+    if (nrow(traffic) == 0) return(traffic)
+
+    traffic <- traffic %>% dplyr::mutate(page_path = page_path)
+
+    if (by_date) {
+        traffic <- traffic %>%
+            dplyr::select(
+                .data$date,
+                .data$page_path,
+                dplyr::everything())
+    } else {
+        traffic <- traffic %>%
+            dplyr::select(
+                .data$page_path,
+                dplyr::everything())
+    }
+
+    traffic
 }
 
-# Individual pages: All research briefings (Parliament website and Intranet) ---
+# Individual pages: Parliament website and intranet ---------------------------
 
 #' Download traffic data for a research briefing with the given URL on the main
 #' Parliament website and the Parliamentary intranet
@@ -637,6 +743,8 @@ fetch_traffic_for_rb_intranet <- function(
 #' @param end_date The end date as an ISO 8601 string.
 #' @param internal A boolean indicating whether to return only the results for
 #'   traffic from internal parliamentary networks. The default is FALSE.
+#' @param by_date A boolean indicating whether to return the results broken
+#'   down by date. The default is FALSE.
 #' @param combined A boolean indicating whether to combine the totals from
 #'   the website and the intranet or to report them separately. Note that
 #'   combining the traffic across both properties can introduce errors in
@@ -650,40 +758,61 @@ fetch_traffic_for_rb <- function(
     start_date,
     end_date,
     internal = FALSE,
+    by_date = FALSE,
     combined = FALSE) {
 
     public <- fetch_traffic_for_rb_public(
         url = url,
         start_date = start_date,
         end_date = end_date,
-        internal = internal)
+        internal = internal,
+        by_date = by_date)
 
     intranet <- fetch_traffic_for_rb_intranet(
         url = url,
         start_date = start_date,
-        end_date = end_date)
+        end_date = end_date,
+        by_date = by_date)
+
+    if (nrow(public) == 0 && nrow(intranet) == 0) return(tibble::tibble())
 
     if (combined) {
 
-        dplyr::bind_rows(public, intranet) %>%
-            dplyr::group_by(.data$date, .data$page_path) %>%
+        traffic <- dplyr::bind_rows(public, intranet)
+
+        if (by_date) {
+            traffic <- traffic %>% dplyr::group_by(.data$date, .data$page_path)
+        } else {
+            traffic <- traffic %>%  dplyr::group_by(.data$page_path)
+        }
+
+        traffic <- traffic %>%
             dplyr::summarise(
                 users = sum(.data$users),
                 sessions = sum(.data$sessions),
                 pageviews = sum(.data$pageviews),
-                upageviews = sum(.data$upageviews))
+                unique_pageviews = sum(.data$unique_pageviews)) %>%
+            dplyr::ungroup()
 
     } else {
 
-        public$website <- LABEL_PUBLIC
-        intranet$website <- LABEL_INTRANET
+        if (nrow(public) > 0) public$website <- LABEL_PUBLIC
+        if (nrow(intranet) > 0) intranet$website <- LABEL_INTRANET
+        traffic <- dplyr::bind_rows(public, intranet)
 
-        dplyr::bind_rows(public, intranet) %>%
-            dplyr::select(
-                .data$date,
-                .data$page_path,
-                .data$website,
-                dplyr::everything())
+        if (by_date) {
+            traffic <- traffic %>%
+                dplyr::select(
+                    .data$date,
+                    .data$page_path,
+                    dplyr::everything())
+        } else {
+            traffic <- traffic %>%
+                dplyr::select(
+                    .data$page_path,
+                    dplyr::everything())
+        }
     }
 
+    traffic
 }

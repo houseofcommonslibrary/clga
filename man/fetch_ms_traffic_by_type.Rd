@@ -6,7 +6,8 @@
 microsite}
 \usage{
 fetch_ms_traffic_by_type(type_regexp, start_date, end_date,
-  internal = FALSE, detailed = FALSE, merge_paths = FALSE)
+  internal = FALSE, by_date = FALSE, by_page = FALSE,
+  merge_paths = FALSE)
 }
 \arguments{
 \item{type_regexp}{That regular expression that describes the page path for
@@ -19,16 +20,19 @@ one or more post types.}
 \item{internal}{A boolean indicating whether to return only the results for
 traffic from internal parliamentary networks. The default is FALSE.}
 
-\item{detailed}{A boolean indicating whether to return the results by date
-in total, or broken down by date and page. The default is FALSE.}
+\item{by_date}{A boolean indicating whether to return the results broken
+down by date. The default is FALSE.}
+
+\item{by_page}{A boolean indicating whether to return the results broken
+down by individual page. The default is FALSE.}
 
 \item{merge_paths}{A boolean indicating whether to aggregate metrics for all
-pages that have the same path i.e. for all pages whose paths differ only
-by their query string. Note that while merging paths is necessary for
-analysis of individual pages it can introduce small errors in the number
-of users by page, as the same user may visit the same page through URLs
-with different query strings. This parameter is ignored if \code{detailed}
-is set to FALSE. The default value is FALSE.}
+pages that have the same root path i.e. for all pages whose paths differ
+only by their query string. This parameter is ignored if \code{by_page} is
+set to FALSE. Note that while merging paths is necessary for analysis of
+individual pages it can introduce small errors in the number of users by
+page, as the same user may visit the same page through URLs with different
+query strings. The default value is FALSE.}
 }
 \value{
 A tibble of traffic metrics.

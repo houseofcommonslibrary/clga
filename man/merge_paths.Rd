@@ -4,11 +4,14 @@
 \alias{merge_paths}
 \title{Aggregate metrics for all pages that have the same root path}
 \usage{
-merge_paths(traffic)
+merge_paths(traffic, by_date)
 }
 \arguments{
 \item{traffic}{A tibble of traffic metrics by date and page path returned
 from one of the fetch_*_traffic functions.}
+
+\item{by_date}{A boolean indicating whether the results are broken down by
+date.}
 }
 \value{
 A tibble with the same column structure as the input tibble where

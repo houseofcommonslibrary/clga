@@ -4,7 +4,7 @@
 \alias{fetch_traffic}
 \title{Download traffic data for a given view}
 \usage{
-fetch_traffic(view_id, start_date, end_date, dimensions = c("date"),
+fetch_traffic(view_id, start_date, end_date, dimensions = NULL,
   dim_filters = NULL)
 }
 \arguments{
@@ -14,7 +14,7 @@ fetch_traffic(view_id, start_date, end_date, dimensions = c("date"),
 
 \item{end_date}{The end date as an ISO 8601 string.}
 
-\item{dimensions}{A vector of dimensions to return. The default is "date".}
+\item{dimensions}{A vector of dimensions to return. The default is NULL.}
 
 \item{dim_filters}{A set of dimension filters to constrain the results. The
 default is NULL.}
@@ -26,4 +26,3 @@ A tibble of traffic metrics.
 \code{fetch_traffic} downloads data on traffic metrics for a given view
 during the given dates and returns the data as a tibble.
 }
-\keyword{internal}

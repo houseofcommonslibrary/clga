@@ -22,23 +22,26 @@ get_path_from_url <- function(url) {
 #'
 #' @param traffic A tibble of traffic metrics by date and page path returned
 #'   from one of the fetch_*_traffic functions.
+#' @param by_date A boolean indicating whether the results are broken down by
+#'   date.
 #' @return A tibble with the same column structure as the input tibble where
 #'   the metrics have been summed for all pages with the same root path.
 #' @keywords internal
 
-merge_paths <- function(traffic) {
+merge_paths <- function(traffic, by_date) {
 
     if (!tibble::is_tibble(traffic)) {
         stop("traffic data is not a tibble")
     }
 
     expected_colnames <- c(
-        "date",
         "page_path",
         "users",
         "sessions",
         "pageviews",
         "upageviews")
+
+    if (by_date) expected_colnames <- c("date", expected_colnames)
 
     if (! all(colnames(traffic) == expected_colnames)) {
         stop("traffic data does not have the expected columns")
@@ -46,13 +49,17 @@ merge_paths <- function(traffic) {
 
     traffic$page_path <- stringr::str_extract(traffic$page_path,"[^?]+")
 
+    if (by_date) {
+        traffic <- traffic %>% dplyr::group_by(.data$date, .data$page_path)
+    } else {
+        traffic <- traffic %>% dplyr::group_by(.data$page_path)
+    }
+
     traffic %>%
-        dplyr::group_by(
-            .data$date,
-            .data$page_path) %>%
         dplyr::summarise(
             users = sum(.data$users),
             sessions = sum(.data$sessions),
             pageviews = sum(.data$pageviews),
-            upageviews = sum(.data$upageviews))
+            upageviews = sum(.data$unique_pageviews)) %>%
+        dplyr::ungroup()
 }
