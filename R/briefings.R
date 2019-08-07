@@ -372,7 +372,7 @@ fetch_rb_traffic_intranet <- function(
 #'   the number of users, as the same user may visit pages on both properties.
 #'   The default is FALSE.
 #' @return A tibble of traffic metrics.
-#' @keywords internal
+#' @export
 
 fetch_rb_traffic_all_sources <- function(
     fetch_public,

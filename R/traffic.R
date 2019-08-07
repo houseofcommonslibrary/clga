@@ -14,7 +14,7 @@
 #' @param dim_filters A set of dimension filters to constrain the results. The
 #'   default is NULL.
 #' @return A tibble of traffic metrics.
-#' @keywords internal
+#' @export
 
 fetch_traffic <- function(
     view_id,
