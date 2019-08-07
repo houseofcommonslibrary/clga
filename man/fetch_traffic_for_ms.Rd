@@ -5,7 +5,8 @@
 \title{Download traffic data for a post with the given URL on the Commons Library
 microsite}
 \usage{
-fetch_traffic_for_ms(url, start_date, end_date, internal = FALSE)
+fetch_traffic_for_ms(url, start_date, end_date, internal = FALSE,
+  by_date = FALSE)
 }
 \arguments{
 \item{url}{The URL of a page for which traffic data is requested.}
@@ -16,6 +17,9 @@ fetch_traffic_for_ms(url, start_date, end_date, internal = FALSE)
 
 \item{internal}{A boolean indicating whether to return only the results for
 traffic from internal parliamentary networks. The default is FALSE.}
+
+\item{by_date}{A boolean indicating whether to return the results broken
+down by date. The default is FALSE.}
 }
 \value{
 A tibble of traffic metrics.
