@@ -39,7 +39,7 @@ merge_paths <- function(traffic, by_date) {
         "users",
         "sessions",
         "pageviews",
-        "upageviews")
+        "unique_pageviews")
 
     if (by_date) expected_colnames <- c("date", expected_colnames)
 
