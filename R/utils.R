@@ -34,7 +34,7 @@ merge_paths <- function(traffic, by_date) {
         stop("traffic data is not a tibble")
     }
 
-    if (nrow(traffic) == 0) return(traffic)
+    if (ncol(traffic) == 0) return(traffic)
 
     expected_colnames <- c(
         "page_path",
