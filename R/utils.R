@@ -60,6 +60,6 @@ merge_paths <- function(traffic, by_date) {
             users = sum(.data$users),
             sessions = sum(.data$sessions),
             pageviews = sum(.data$pageviews),
-            upageviews = sum(.data$unique_pageviews)) %>%
+            unique_pageviews = sum(.data$unique_pageviews)) %>%
         dplyr::ungroup()
 }
