@@ -29,7 +29,8 @@ fetch_traffic <- function(
             metrics = c("users", "sessions", "pageviews", "uniquePageviews"),
             dimensions = dimensions,
             dim_filters = dim_filters,
-            max = -1) %>%
+            max = -1,
+            anti_sample = TRUE) %>%
         tibble::as_tibble() %>%
         janitor::clean_names(case = "snake")
 }
