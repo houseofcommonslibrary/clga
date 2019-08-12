@@ -49,7 +49,7 @@ merge_paths <- function(traffic, by_date) {
         stop("traffic data does not have the expected columns")
     }
 
-    traffic$page_path <- stringr::str_extract(traffic$page_path,"[^?]+")
+    traffic$page_path <- stringr::str_extract(traffic$page_path,"[^?#]+")
 
     if (by_date) {
         traffic <- traffic %>% dplyr::group_by(.data$date, .data$page_path)
