@@ -29,6 +29,12 @@
 #'   query strings. The default value is FALSE.
 #' @param dim_filters A set of dimension filters to constrain the results. The
 #'   default is NULL.
+#' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
+#'   anti-sample feature, which chunks API calls to keep the number of records
+#'   requested under the API limits that trigger sampling. This makes the
+#'   download process slower but ensures that all records are returned. Only
+#'   use this feature if you see that an API request triggers sampling without
+#'   it. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -38,7 +44,8 @@ fetch_rb_traffic_public_by_filter <- function(
     by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE,
-    dim_filters = NULL) {
+    dim_filters = NULL,
+    anti_sample = FALSE) {
 
     start <- as.Date(start_date)
     end <- as.Date(end_date)
@@ -55,7 +62,8 @@ fetch_rb_traffic_public_by_filter <- function(
             start_date = start_date,
             end_date = end_date,
             dimensions = dimensions,
-            dim_filters = dim_filters)
+            dim_filters = dim_filters,
+            anti_sample = anti_sample)
 
     } else if (start > as.Date(DATE_END_RB_OLD)) {
 
@@ -64,7 +72,8 @@ fetch_rb_traffic_public_by_filter <- function(
             start_date = start_date,
             end_date = end_date,
             dimensions = dimensions,
-            dim_filters = dim_filters)
+            dim_filters = dim_filters,
+            anti_sample = anti_sample)
 
     } else {
 
@@ -74,13 +83,15 @@ fetch_rb_traffic_public_by_filter <- function(
                 start_date = start_date,
                 end_date = DATE_END_RB_OLD,
                 dimensions = dimensions,
-                dim_filters = dim_filters),
+                dim_filters = dim_filters,
+                anti_sample = anti_sample),
             fetch_traffic(
                 view_id = VIEW_ID_RB_NEW,
                 start_date = DATE_START_RB_NEW,
                 end_date = end_date,
                 dimensions = dimensions,
-                dim_filters = dim_filters))
+                dim_filters = dim_filters,
+                anti_sample = anti_sample))
     }
 
     if (by_page && merge_paths) traffic <- merge_paths(traffic, by_date)
@@ -117,6 +128,12 @@ fetch_rb_traffic_public_by_filter <- function(
 #'   individual pages it can introduce small errors in the number of users by
 #'   page, as the same user may visit the same page through URLs with different
 #'   query strings. The default value is FALSE.
+#' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
+#'   anti-sample feature, which chunks API calls to keep the number of records
+#'   requested under the API limits that trigger sampling. This makes the
+#'   download process slower but ensures that all records are returned. Only
+#'   use this feature if you see that an API request triggers sampling without
+#'   it. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -127,7 +144,8 @@ fetch_rb_traffic_public_by_type <- function(
     internal = FALSE,
     by_date = FALSE,
     by_page = FALSE,
-    merge_paths = FALSE) {
+    merge_paths = FALSE,
+    anti_sample = FALSE) {
 
     type_filter <- googleAnalyticsR::dim_filter(
         "pagePath",
@@ -151,7 +169,8 @@ fetch_rb_traffic_public_by_type <- function(
         by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths,
-        dim_filters = dim_filters)
+        dim_filters = dim_filters,
+        anti_sample = anti_sample)
 }
 
 #' Download traffic data for all pages in the research briefings view
@@ -180,6 +199,12 @@ fetch_rb_traffic_public_by_type <- function(
 #'   individual pages it can introduce small errors in the number of users by
 #'   page, as the same user may visit the same page through URLs with different
 #'   query strings. The default value is FALSE.
+#' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
+#'   anti-sample feature, which chunks API calls to keep the number of records
+#'   requested under the API limits that trigger sampling. This makes the
+#'   download process slower but ensures that all records are returned. Only
+#'   use this feature if you see that an API request triggers sampling without
+#'   it. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -189,7 +214,8 @@ fetch_rb_traffic_public <- function(
     internal = FALSE,
     by_date = FALSE,
     by_page = FALSE,
-    merge_paths = FALSE) {
+    merge_paths = FALSE,
+    anti_sample = FALSE) {
 
     fetch_rb_traffic_public_by_type(
         type_regexp = PATH_REGEXP_ALL,
@@ -198,7 +224,8 @@ fetch_rb_traffic_public <- function(
         internal = internal,
         by_date = by_date,
         by_page = by_page,
-        merge_paths = merge_paths)
+        merge_paths = merge_paths,
+        anti_sample = anti_sample)
 }
 
 # Sets of pages: Intranet -----------------------------------------------------
@@ -230,6 +257,12 @@ fetch_rb_traffic_public <- function(
 #'   query strings. The default value is FALSE.
 #' @param dim_filters A set of dimension filters to constrain the results. The
 #'   default is NULL.
+#' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
+#'   anti-sample feature, which chunks API calls to keep the number of records
+#'   requested under the API limits that trigger sampling. This makes the
+#'   download process slower but ensures that all records are returned. Only
+#'   use this feature if you see that an API request triggers sampling without
+#'   it. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -239,7 +272,8 @@ fetch_rb_traffic_intranet_by_filter <- function(
     by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE,
-    dim_filters = NULL) {
+    dim_filters = NULL,
+    anti_sample = FALSE) {
 
     start <- as.Date(start_date)
     end <- as.Date(end_date)
@@ -254,7 +288,8 @@ fetch_rb_traffic_intranet_by_filter <- function(
         start_date = start_date,
         end_date = end_date,
         dimensions = dimensions,
-        dim_filters = dim_filters)
+        dim_filters = dim_filters,
+        anti_sample = anti_sample)
 
     if (by_page && merge_paths) traffic <- merge_paths(traffic, by_date)
     traffic
@@ -288,6 +323,12 @@ fetch_rb_traffic_intranet_by_filter <- function(
 #'   individual pages it can introduce small errors in the number of users by
 #'   page, as the same user may visit the same page through URLs with different
 #'   query strings. The default value is FALSE.
+#' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
+#'   anti-sample feature, which chunks API calls to keep the number of records
+#'   requested under the API limits that trigger sampling. This makes the
+#'   download process slower but ensures that all records are returned. Only
+#'   use this feature if you see that an API request triggers sampling without
+#'   it. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -297,7 +338,8 @@ fetch_rb_traffic_intranet_by_type <- function(
     end_date,
     by_date = FALSE,
     by_page = FALSE,
-    merge_paths = FALSE) {
+    merge_paths = FALSE,
+    anti_sample = FALSE) {
 
     type_filter <- googleAnalyticsR::dim_filter(
         "pagePath",
@@ -313,7 +355,8 @@ fetch_rb_traffic_intranet_by_type <- function(
         by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths,
-        dim_filters = dim_filters)
+        dim_filters = dim_filters,
+        anti_sample = anti_sample)
 }
 
 #' Download traffic data for all pages in the research briefings intranet view
@@ -340,6 +383,12 @@ fetch_rb_traffic_intranet_by_type <- function(
 #'   individual pages it can introduce small errors in the number of users by
 #'   page, as the same user may visit the same page through URLs with different
 #'   query strings. The default value is FALSE.
+#' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
+#'   anti-sample feature, which chunks API calls to keep the number of records
+#'   requested under the API limits that trigger sampling. This makes the
+#'   download process slower but ensures that all records are returned. Only
+#'   use this feature if you see that an API request triggers sampling without
+#'   it. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -348,7 +397,8 @@ fetch_rb_traffic_intranet <- function(
     end_date,
     by_date = FALSE,
     by_page = FALSE,
-    merge_paths = FALSE) {
+    merge_paths = FALSE,
+    anti_sample = FALSE) {
 
     fetch_rb_traffic_intranet_by_type(
         type_regexp = PATH_REGEXP_ALL,
@@ -356,7 +406,8 @@ fetch_rb_traffic_intranet <- function(
         end_date = end_date,
         by_date = by_date,
         by_page = by_page,
-        merge_paths = merge_paths)
+        merge_paths = merge_paths,
+        anti_sample = anti_sample)
 }
 
 # Sets of pages: All research briefings ---------------------------------------
@@ -397,6 +448,12 @@ fetch_rb_traffic_intranet <- function(
 #'   combining the traffic across both properties can introduce errors in
 #'   the number of users, as the same user may visit pages on both properties.
 #'   The default is FALSE.
+#' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
+#'   anti-sample feature, which chunks API calls to keep the number of records
+#'   requested under the API limits that trigger sampling. This makes the
+#'   download process slower but ensures that all records are returned. Only
+#'   use this feature if you see that an API request triggers sampling without
+#'   it. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -409,7 +466,8 @@ fetch_rb_traffic_all_sources <- function(
     by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE,
-    combined = FALSE) {
+    combined = FALSE,
+    anti_sample = FALSE) {
 
     public <- fetch_public(
         start_date = start_date,
@@ -417,14 +475,16 @@ fetch_rb_traffic_all_sources <- function(
         internal = internal,
         by_date = by_date,
         by_page = by_page,
-        merge_paths = merge_paths)
+        merge_paths = merge_paths,
+        anti_sample = anti_sample)
 
     intranet <- fetch_intranet(
         start_date = start_date,
         end_date = end_date,
         by_date = by_date,
         by_page = by_page,
-        merge_paths = merge_paths)
+        merge_paths = merge_paths,
+        anti_sample = anti_sample)
 
     if (combined) {
 
@@ -525,6 +585,12 @@ fetch_rb_traffic_all_sources <- function(
 #'   combining the traffic across both properties can introduce errors in
 #'   the number of users, as the same user may visit pages on both properties.
 #'   The default is FALSE.
+#' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
+#'   anti-sample feature, which chunks API calls to keep the number of records
+#'   requested under the API limits that trigger sampling. This makes the
+#'   download process slower but ensures that all records are returned. Only
+#'   use this feature if you see that an API request triggers sampling without
+#'   it. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -535,7 +601,8 @@ fetch_rb_traffic <- function(
     by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE,
-    combined = FALSE) {
+    combined = FALSE,
+    anti_sample = FALSE) {
 
     fetch_rb_traffic_all_sources(
         fetch_rb_traffic_public,
@@ -546,7 +613,8 @@ fetch_rb_traffic <- function(
         by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths,
-        combined = combined)
+        combined = combined,
+        anti_sample = anti_sample)
 }
 
 # Individual pages: Parliament website ----------------------------------------
@@ -565,6 +633,12 @@ fetch_rb_traffic <- function(
 #'   traffic from internal parliamentary networks. The default is FALSE.
 #' @param by_date A boolean indicating whether to return the results broken
 #'   down by date. The default is FALSE.
+#' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
+#'   anti-sample feature, which chunks API calls to keep the number of records
+#'   requested under the API limits that trigger sampling. This makes the
+#'   download process slower but ensures that all records are returned. Only
+#'   use this feature if you see that an API request triggers sampling without
+#'   it. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -573,7 +647,8 @@ fetch_traffic_for_rb_public <- function(
     start_date,
     end_date,
     internal = FALSE,
-    by_date = FALSE) {
+    by_date = FALSE,
+    anti_sample = FALSE) {
 
     start <- as.Date(start_date)
     end <- as.Date(end_date)
@@ -607,7 +682,8 @@ fetch_traffic_for_rb_public <- function(
             start_date = start_date,
             end_date = end_date,
             dimensions = dimensions,
-            dim_filters = dim_filters)
+            dim_filters = dim_filters,
+            anti_sample = anti_sample)
 
     } else if (start > as.Date(DATE_END_RB_OLD)) {
 
@@ -616,7 +692,8 @@ fetch_traffic_for_rb_public <- function(
             start_date = start_date,
             end_date = end_date,
             dimensions = dimensions,
-            dim_filters = dim_filters)
+            dim_filters = dim_filters,
+            anti_sample = anti_sample)
 
     } else {
 
@@ -626,13 +703,15 @@ fetch_traffic_for_rb_public <- function(
                 start_date = start_date,
                 end_date = DATE_END_RB_OLD,
                 dimensions = dimensions,
-                dim_filters = dim_filters),
+                dim_filters = dim_filters,
+                anti_sample = anti_sample),
             fetch_traffic(
                 view_id = VIEW_ID_RB_NEW,
                 start_date = DATE_START_RB_NEW,
                 end_date = end_date,
                 dimensions = dimensions,
-                dim_filters = dim_filters))
+                dim_filters = dim_filters,
+                anti_sample = anti_sample))
     }
 
     if (nrow(traffic) == 0) return(traffic)
@@ -669,6 +748,12 @@ fetch_traffic_for_rb_public <- function(
 #' @param end_date The end date as an ISO 8601 string.
 #' @param by_date A boolean indicating whether to return the results broken
 #'   down by date. The default is FALSE.
+#' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
+#'   anti-sample feature, which chunks API calls to keep the number of records
+#'   requested under the API limits that trigger sampling. This makes the
+#'   download process slower but ensures that all records are returned. Only
+#'   use this feature if you see that an API request triggers sampling without
+#'   it. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -676,7 +761,8 @@ fetch_traffic_for_rb_intranet <- function(
     url,
     start_date,
     end_date,
-    by_date = FALSE) {
+    by_date = FALSE,
+    anti_sample = FALSE) {
 
     start <- as.Date(start_date)
     end <- as.Date(end_date)
@@ -702,7 +788,8 @@ fetch_traffic_for_rb_intranet <- function(
             start_date = start_date,
             end_date = end_date,
             dimensions = dimensions,
-            dim_filters = dim_filters)
+            dim_filters = dim_filters,
+            anti_sample = anti_sample)
 
     if (nrow(traffic) == 0) return(traffic)
 
@@ -750,6 +837,12 @@ fetch_traffic_for_rb_intranet <- function(
 #'   combining the traffic across both properties can introduce errors in
 #'   the number of users, as the same user may visit pages on both properties.
 #'   The default is FALSE.
+#' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
+#'   anti-sample feature, which chunks API calls to keep the number of records
+#'   requested under the API limits that trigger sampling. This makes the
+#'   download process slower but ensures that all records are returned. Only
+#'   use this feature if you see that an API request triggers sampling without
+#'   it. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -759,20 +852,23 @@ fetch_traffic_for_rb <- function(
     end_date,
     internal = FALSE,
     by_date = FALSE,
-    combined = FALSE) {
+    combined = FALSE,
+    anti_sample = FALSE) {
 
     public <- fetch_traffic_for_rb_public(
         url = url,
         start_date = start_date,
         end_date = end_date,
         internal = internal,
-        by_date = by_date)
+        by_date = by_date,
+        anti_sample = anti_sample)
 
     intranet <- fetch_traffic_for_rb_intranet(
         url = url,
         start_date = start_date,
         end_date = end_date,
-        by_date = by_date)
+        by_date = by_date,
+        anti_sample = anti_sample)
 
     if (nrow(public) == 0 && nrow(intranet) == 0) return(tibble::tibble())
 

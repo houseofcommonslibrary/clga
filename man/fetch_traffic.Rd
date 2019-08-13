@@ -5,7 +5,7 @@
 \title{Download traffic data for a given view}
 \usage{
 fetch_traffic(view_id, start_date, end_date, dimensions = NULL,
-  dim_filters = NULL)
+  dim_filters = NULL, anti_sample = FALSE)
 }
 \arguments{
 \item{view_id}{The view id in Google Analytics}
@@ -18,6 +18,13 @@ fetch_traffic(view_id, start_date, end_date, dimensions = NULL,
 
 \item{dim_filters}{A set of dimension filters to constrain the results. The
 default is NULL.}
+
+\item{anti_sample}{A boolean indicating whether to use googleAnalyticsR's
+anti-sample feature, which chunks API calls to keep the number of records
+requested under the API limits that trigger sampling. This makes the
+download process slower but ensures that all records are returned. Only
+use this feature if you see that an API request triggers sampling without
+it. The default is FALSE.}
 }
 \value{
 A tibble of traffic metrics.

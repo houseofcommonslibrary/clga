@@ -13,6 +13,12 @@
 #' @param dimensions A vector of dimensions to return. The default is NULL.
 #' @param dim_filters A set of dimension filters to constrain the results. The
 #'   default is NULL.
+#' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
+#'   anti-sample feature, which chunks API calls to keep the number of records
+#'   requested under the API limits that trigger sampling. This makes the
+#'   download process slower but ensures that all records are returned. Only
+#'   use this feature if you see that an API request triggers sampling without
+#'   it. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -21,7 +27,8 @@ fetch_traffic <- function(
     start_date,
     end_date,
     dimensions = NULL,
-    dim_filters = NULL) {
+    dim_filters = NULL,
+    anti_sample = FALSE) {
 
     googleAnalyticsR::google_analytics(
             view_id,
@@ -29,8 +36,8 @@ fetch_traffic <- function(
             metrics = c("users", "sessions", "pageviews", "uniquePageviews"),
             dimensions = dimensions,
             dim_filters = dim_filters,
-            max = -1,
-            anti_sample = TRUE) %>%
+            anti_sample = anti_sample,
+            max = -1) %>%
         tibble::as_tibble() %>%
         janitor::clean_names(case = "snake")
 }

@@ -7,7 +7,7 @@ and the research briefings intranet view}
 \usage{
 fetch_rb_traffic(start_date, end_date, internal = FALSE,
   by_date = FALSE, by_page = FALSE, merge_paths = FALSE,
-  combined = FALSE)
+  combined = FALSE, anti_sample = FALSE)
 }
 \arguments{
 \item{start_date}{The start date as an ISO 8601 string.}
@@ -36,6 +36,13 @@ the website and the intranet or to report them separately. Note that
 combining the traffic across both properties can introduce errors in
 the number of users, as the same user may visit pages on both properties.
 The default is FALSE.}
+
+\item{anti_sample}{A boolean indicating whether to use googleAnalyticsR's
+anti-sample feature, which chunks API calls to keep the number of records
+requested under the API limits that trigger sampling. This makes the
+download process slower but ensures that all records are returned. Only
+use this feature if you see that an API request triggers sampling without
+it. The default is FALSE.}
 }
 \value{
 A tibble of traffic metrics.

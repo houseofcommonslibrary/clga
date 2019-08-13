@@ -6,7 +6,8 @@
 the Parliamentary intranet}
 \usage{
 fetch_rb_traffic_intranet_by_type(type_regexp, start_date, end_date,
-  by_date = FALSE, by_page = FALSE, merge_paths = FALSE)
+  by_date = FALSE, by_page = FALSE, merge_paths = FALSE,
+  anti_sample = FALSE)
 }
 \arguments{
 \item{type_regexp}{That regular expression that describes the page path for
@@ -29,6 +30,13 @@ set to FALSE. Note that while merging paths is necessary for analysis of
 individual pages it can introduce small errors in the number of users by
 page, as the same user may visit the same page through URLs with different
 query strings. The default value is FALSE.}
+
+\item{anti_sample}{A boolean indicating whether to use googleAnalyticsR's
+anti-sample feature, which chunks API calls to keep the number of records
+requested under the API limits that trigger sampling. This makes the
+download process slower but ensures that all records are returned. Only
+use this feature if you see that an API request triggers sampling without
+it. The default is FALSE.}
 }
 \value{
 A tibble of traffic metrics.
