@@ -488,7 +488,6 @@ fetch_rb_traffic_all_sources <- function(
 
     if (combined) {
 
-
         if (by_date) {
 
             if (by_page) {
@@ -504,6 +503,10 @@ fetch_rb_traffic_all_sources <- function(
             if (by_page) {
                 all <- dplyr::bind_rows(public, intranet) %>%
                     dplyr::group_by(.data$page_path)
+            } else {
+                all <- dplyr::bind_rows(public, intranet) %>%
+                    dplyr::mutate(website = "combined") %>%
+                    dplyr::group_by(.data$website)
             }
         }
 
