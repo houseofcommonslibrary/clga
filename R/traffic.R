@@ -38,7 +38,8 @@ fetch_traffic <- function(
             dim_filters = dim_filters,
             anti_sample = anti_sample,
             anti_sample_batches = 1,
-            max = -1) %>%
+            max = -1,
+            useResourceQuotas = TRUE) %>%
         tibble::as_tibble() %>%
         janitor::clean_names(case = "snake")
 }
