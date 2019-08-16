@@ -6,16 +6,19 @@
 microsite}
 \usage{
 fetch_ms_traffic_by_type(type_regexp, start_date, end_date,
-  internal = FALSE, by_date = FALSE, by_page = FALSE,
-  merge_paths = FALSE, anti_sample = FALSE)
+  dimensions = NULL, internal = FALSE, by_date = FALSE,
+  by_page = FALSE, merge_paths = FALSE, anti_sample = FALSE)
 }
 \arguments{
-\item{type_regexp}{That regular expression that describes the page path for
-one or more post types.}
+\item{type_regexp}{A regular expression that describes the page path for one
+or more post types.}
 
 \item{start_date}{The start date as an ISO 8601 string.}
 
 \item{end_date}{The end date as an ISO 8601 string.}
+
+\item{dimensions}{A set of dimensions to constrain the results. The
+default is NULL.}
 
 \item{internal}{A boolean indicating whether to return only the results for
 traffic from internal parliamentary networks. The default is FALSE.}

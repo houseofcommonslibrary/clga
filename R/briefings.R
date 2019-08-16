@@ -111,10 +111,10 @@ fetch_rb_traffic_public_by_filter <- function(
 #' Use \code{fetch_rb_traffic_intranet_by_type} to retrieve equivalent data
 #' for the Parliamentary intranet.
 #'
-#' @param type_regexp That regular expression that describes the page path for
-#'   one or more briefing types.
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
+#' @param type_regexp A regular expression that describes the page path for one
+#'   or more briefing types. The default is a regexp that matches all pages.
 #' @param internal A boolean indicating whether to return only the results for
 #'   traffic from internal parliamentary networks. The default is FALSE.
 #' @param by_date A boolean indicating whether to return the results broken
@@ -138,9 +138,9 @@ fetch_rb_traffic_public_by_filter <- function(
 #' @export
 
 fetch_rb_traffic_public_by_type <- function(
-    type_regexp,
     start_date,
     end_date,
+    type_regexp = PATH_REGEXP_ALL,
     internal = FALSE,
     by_date = FALSE,
     by_page = FALSE,
@@ -218,7 +218,6 @@ fetch_rb_traffic_public <- function(
     anti_sample = FALSE) {
 
     fetch_rb_traffic_public_by_type(
-        type_regexp = PATH_REGEXP_ALL,
         start_date = start_date,
         end_date = end_date,
         internal = internal,
@@ -308,10 +307,10 @@ fetch_rb_traffic_intranet_by_filter <- function(
 #' Use \code{fetch_rb_traffic_public_by_type} to retrieve equivalent data
 #' for the main Parliamentary website.
 #'
-#' @param type_regexp That regular expression that describes the page path for
-#'   one or more briefing types.
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
+#' @param type_regexp A regular expression that describes the page path for one
+#'   or more briefing types. The default is a regexp that matches all pages.
 #' @param by_date A boolean indicating whether to return the results broken
 #'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
@@ -333,9 +332,9 @@ fetch_rb_traffic_intranet_by_filter <- function(
 #' @export
 
 fetch_rb_traffic_intranet_by_type <- function(
-    type_regexp,
     start_date,
     end_date,
+    type_regexp = PATH_REGEXP_ALL,
     by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE,
@@ -401,7 +400,6 @@ fetch_rb_traffic_intranet <- function(
     anti_sample = FALSE) {
 
     fetch_rb_traffic_intranet_by_type(
-        type_regexp = PATH_REGEXP_ALL,
         start_date = start_date,
         end_date = end_date,
         by_date = by_date,

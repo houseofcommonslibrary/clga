@@ -5,17 +5,17 @@
 \title{Download traffic data for different types of Commons research briefings on
 the main Parliamentary website}
 \usage{
-fetch_rb_traffic_public_by_type(type_regexp, start_date, end_date,
-  internal = FALSE, by_date = FALSE, by_page = FALSE,
-  merge_paths = FALSE, anti_sample = FALSE)
+fetch_rb_traffic_public_by_type(start_date, end_date,
+  type_regexp = PATH_REGEXP_ALL, internal = FALSE, by_date = FALSE,
+  by_page = FALSE, merge_paths = FALSE, anti_sample = FALSE)
 }
 \arguments{
-\item{type_regexp}{That regular expression that describes the page path for
-one or more briefing types.}
-
 \item{start_date}{The start date as an ISO 8601 string.}
 
 \item{end_date}{The end date as an ISO 8601 string.}
+
+\item{type_regexp}{A regular expression that describes the page path for one
+or more briefing types. The default is a regexp that matches all pages.}
 
 \item{internal}{A boolean indicating whether to return only the results for
 traffic from internal parliamentary networks. The default is FALSE.}

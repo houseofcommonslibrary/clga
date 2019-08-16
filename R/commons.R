@@ -49,9 +49,9 @@ fetch_crb_traffic_public <- function(
     anti_sample = FALSE) {
 
     fetch_rb_traffic_public_by_type(
-        type_regexp = PATH_REGEXP_RB_CRB,
         start_date = start_date,
         end_date = end_date,
+        type_regexp = PATH_REGEXP_RB_CRB,
         internal = internal,
         by_date = by_date,
         by_page = by_page,
@@ -106,9 +106,9 @@ fetch_cbp_traffic_public <- function(
     anti_sample = FALSE) {
 
     fetch_rb_traffic_public_by_type(
-        type_regexp = PATH_REGEXP_RB_CBP,
         start_date = start_date,
         end_date = end_date,
+        type_regexp = PATH_REGEXP_RB_CBP,
         internal = internal,
         by_date = by_date,
         by_page = by_page,
@@ -163,9 +163,9 @@ fetch_cdp_traffic_public <- function(
     anti_sample = FALSE) {
 
     fetch_rb_traffic_public_by_type(
-        type_regexp = PATH_REGEXP_RB_CDP,
         start_date = start_date,
         end_date = end_date,
+        type_regexp = PATH_REGEXP_RB_CDP,
         internal = internal,
         by_date = by_date,
         by_page = by_page,
@@ -219,9 +219,9 @@ fetch_crb_traffic_intranet <- function(
     anti_sample = FALSE) {
 
     fetch_rb_traffic_intranet_by_type(
-        type_regexp = PATH_REGEXP_RB_CRB,
         start_date = start_date,
         end_date = end_date,
+        type_regexp = PATH_REGEXP_RB_CRB,
         by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths,
@@ -272,9 +272,9 @@ fetch_cbp_traffic_intranet <- function(
     anti_sample = FALSE) {
 
     fetch_rb_traffic_intranet_by_type(
-        type_regexp = PATH_REGEXP_RB_CBP,
         start_date = start_date,
         end_date = end_date,
+        type_regexp = PATH_REGEXP_RB_CBP,
         by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths,
@@ -325,9 +325,9 @@ fetch_cdp_traffic_intranet <- function(
     anti_sample = FALSE) {
 
     fetch_rb_traffic_intranet_by_type(
-        type_regexp = PATH_REGEXP_RB_CDP,
         start_date = start_date,
         end_date = end_date,
+        type_regexp = PATH_REGEXP_RB_CDP,
         by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths,
