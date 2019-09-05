@@ -5,20 +5,17 @@
 \title{Download traffic data for different types of posts on the Commons Library
 microsite}
 \usage{
-fetch_ms_traffic_by_type(type_regexp, start_date, end_date,
-  dimensions = NULL, internal = FALSE, by_date = FALSE,
+fetch_ms_traffic_by_type(start_date, end_date,
+  type_regexp = PATH_REGEXP_ALL, internal = FALSE, by_date = FALSE,
   by_page = FALSE, merge_paths = FALSE, anti_sample = FALSE)
 }
 \arguments{
-\item{type_regexp}{A regular expression that describes the page path for one
-or more post types.}
-
 \item{start_date}{The start date as an ISO 8601 string.}
 
 \item{end_date}{The end date as an ISO 8601 string.}
 
-\item{dimensions}{A set of dimensions to constrain the results. The
-default is NULL.}
+\item{type_regexp}{A regular expression that describes the page path for one
+or more page types. The default is a regexp that matches all pages.}
 
 \item{internal}{A boolean indicating whether to return only the results for
 traffic from internal parliamentary networks. The default is FALSE.}
@@ -49,8 +46,8 @@ A tibble of traffic metrics.
 }
 \description{
 \code{fetch_ms_traffic_by_type} downloads data on traffic metrics for
-specific types of posts based on their path prefixes during the given dates
-and returns the data as a tibble. The specific types of posts to return are
+specific types of pages based on their path prefixes during the given dates
+and returns the data as a tibble. The specific types of pages to return are
 defined with a regular expression that identifies their prefixes within the
 page path.
 }

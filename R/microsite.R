@@ -11,10 +11,6 @@
 #'
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
-#' @param dimensions A set of dimensions to constrain the results. The
-#'   default is NULL.
-#' @param dim_filters A set of dimension filters to constrain the results. The
-#'   default is NULL.
 #' @param by_date A boolean indicating whether to return the results broken
 #'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
@@ -26,6 +22,8 @@
 #'   individual pages it can introduce small errors in the number of users by
 #'   page, as the same user may visit the same page through URLs with different
 #'   query strings. The default value is FALSE.
+#' @param dim_filters A set of dimension filters to constrain the results. The
+#'   default is NULL.
 #' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
 #'   anti-sample feature, which chunks API calls to keep the number of records
 #'   requested under the API limits that trigger sampling. This makes the
@@ -38,18 +36,17 @@
 fetch_ms_traffic_by_filter <- function(
     start_date,
     end_date,
-    dimensions = NULL,
-    dim_filters = NULL,
     by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE,
+    dim_filters = NULL,
     anti_sample = FALSE) {
 
     start <- as.Date(start_date)
     end <- as.Date(end_date)
     if (end < start) stop("The start_date is later than the end_date")
 
-    if (is.null(dimensions)) dimensions <- c()
+    dimensions <- c()
     if (by_date) dimensions <- c(dimensions, "date")
     if (by_page) dimensions <- c(dimensions, "pagePath")
     dimensions <- unique(dimensions)
@@ -70,17 +67,15 @@ fetch_ms_traffic_by_filter <- function(
 #' microsite
 #'
 #' \code{fetch_ms_traffic_by_type} downloads data on traffic metrics for
-#' specific types of posts based on their path prefixes during the given dates
-#' and returns the data as a tibble. The specific types of posts to return are
+#' specific types of pages based on their path prefixes during the given dates
+#' and returns the data as a tibble. The specific types of pages to return are
 #' defined with a regular expression that identifies their prefixes within the
 #' page path.
 #'
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
 #' @param type_regexp A regular expression that describes the page path for one
-#'   or more briefing types. The default is a regexp that matches all pages.
-#' @param dimensions A set of dimensions to constrain the results. The
-#'   default is NULL.
+#'   or more page types. The default is a regexp that matches all pages.
 #' @param internal A boolean indicating whether to return only the results for
 #'   traffic from internal parliamentary networks. The default is FALSE.
 #' @param by_date A boolean indicating whether to return the results broken
@@ -107,7 +102,6 @@ fetch_ms_traffic_by_type <- function(
     start_date,
     end_date,
     type_regexp = PATH_REGEXP_ALL,
-    dimensions = NULL,
     internal = FALSE,
     by_date = FALSE,
     by_page = FALSE,
@@ -136,7 +130,93 @@ fetch_ms_traffic_by_type <- function(
         by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths,
-        dimensions = dimensions,
+        dim_filters = dim_filters,
+        anti_sample = anti_sample)
+}
+
+#' Download traffic data for different categories of posts on the Commons
+#' Library microsite
+#'
+#' \code{fetch_ms_traffic_by_category} downloads data on traffic metrics for
+#' specific types of posts based on the categories they have been assigend in
+#' wordpress during the given dates and returns the data as a tibble.
+#'
+#' @param start_date The start date as an ISO 8601 string.
+#' @param end_date The end date as an ISO 8601 string.
+#' @param category A string representing a category name to filter for with a
+#'   partial match as a string.
+#' @param internal A boolean indicating whether to return only the results for
+#'   traffic from internal parliamentary networks. The default is FALSE.
+#' @param by_date A boolean indicating whether to return the results broken
+#'   down by date. The default is FALSE.
+#' @param by_page A boolean indicating whether to return the results broken
+#'   down by individual page. The default is FALSE.
+#' @param merge_paths A boolean indicating whether to aggregate metrics for all
+#'   pages that have the same root path i.e. for all pages whose paths differ
+#'   only by their query string. This parameter is ignored if \code{by_page} is
+#'   set to FALSE. Note that while merging paths is necessary for analysis of
+#'   individual pages it can introduce small errors in the number of users by
+#'   page, as the same user may visit the same page through URLs with different
+#'   query strings. The default value is FALSE.
+#' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
+#'   anti-sample feature, which chunks API calls to keep the number of records
+#'   requested under the API limits that trigger sampling. This makes the
+#'   download process slower but ensures that all records are returned. Only
+#'   use this feature if you see that an API request triggers sampling without
+#'   it. The default is FALSE.
+#' @return A tibble of traffic metrics.
+#' @export
+
+fetch_ms_traffic_by_category <- function(
+    start_date,
+    end_date,
+    category,
+    exclude_collections = TRUE,
+    internal = FALSE,
+    by_date = FALSE,
+    by_page = FALSE,
+    merge_paths = FALSE,
+    anti_sample = FALSE) {
+
+    category_filter <- googleAnalyticsR::dim_filter(
+        "dimension1",
+        "PARTIAL",
+        category)
+
+    type_filter <- googleAnalyticsR::dim_filter(
+        "pagePath",
+        "REGEXP",
+        PATH_REGEXP_MS_COLLECTIONS,
+        not = TRUE)
+
+    network_filter <- googleAnalyticsR::dim_filter(
+        "networkLocation",
+        "REGEXP",
+        NETWORK_REGEXP_INTERNAL)
+
+    filters <- list(category_filter)
+
+    if (exclude_collections) {
+        if (internal) {
+            filters <- list(category_filter, type_filter, network_filter)
+        } else {
+            filters <- list(category_filter, type_filter)
+        }
+    } else {
+        if (internal) {
+            filters <- list(category_filter, network_filter)
+        }
+    }
+
+    dim_filters <- googleAnalyticsR::filter_clause_ga4(
+        filters, operator = "AND")
+
+    fetch_ms_traffic_by_filter(
+        start_date = start_date,
+        end_date = end_date,
+        by_date = by_date,
+        by_page = by_page,
+        merge_paths = merge_paths,
         dim_filters = dim_filters,
         anti_sample = anti_sample)
 }
@@ -188,88 +268,6 @@ fetch_ms_traffic <- function(
         by_page = by_page,
         merge_paths = merge_paths,
         anti_sample = anti_sample)
-}
-
-#' Download traffic data for all pages in the Commons Library microsite
-#'
-#' \code{fetch_msi_traffic} downloads data on traffic metrics for all insights
-#' on the Commons Library microsite during the given dates and returns the data
-#' as a tibble.
-#'
-#' @param start_date The start date as an ISO 8601 string.
-#' @param end_date The end date as an ISO 8601 string.
-#' @param internal A boolean indicating whether to return only the results for
-#'   traffic from internal parliamentary networks. The default is FALSE.
-#' @param by_date A boolean indicating whether to return the results broken
-#'   down by date. The default is FALSE.
-#' @param by_page A boolean indicating whether to return the results broken
-#'   down by individual page. The default is FALSE.
-#' @param merge_paths A boolean indicating whether to aggregate metrics for all
-#'   pages that have the same root path i.e. for all pages whose paths differ
-#'   only by their query string. This parameter is ignored if \code{by_page} is
-#'   set to FALSE. Note that while merging paths is necessary for analysis of
-#'   individual pages it can introduce small errors in the number of users by
-#'   page, as the same user may visit the same page through URLs with different
-#'   query strings. The default value is FALSE.
-#' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
-#'   anti-sample feature, which chunks API calls to keep the number of records
-#'   requested under the API limits that trigger sampling. This makes the
-#'   download process slower but ensures that all records are returned. Only
-#'   use this feature if you see that an API request triggers sampling without
-#'   it. The default is FALSE.
-#' @return A tibble of traffic metrics.
-#' @export
-
-fetch_msi_traffic <- function(
-    start_date,
-    end_date,
-    internal = FALSE,
-    by_date = FALSE,
-    by_page = FALSE,
-    merge_paths = FALSE,
-    anti_sample = FALSE) {
-
-    traffic <- fetch_ms_traffic_by_type(
-            start_date = start_date,
-            end_date = end_date,
-            dimensions = "dimension1",
-            internal = internal,
-            by_date = by_date,
-            by_page = by_page,
-            anti_sample = anti_sample) %>%
-        dplyr::rename(page_category = .data$dimension1)
-
-    if (by_date) {
-
-        if (by_page) {
-            traffic <- traffic %>%
-                dplyr::group_by(.data$date, .data$page_path)
-        } else {
-            traffic <- traffic %>%
-                dplyr::group_by(.data$date)
-        }
-
-    } else {
-
-        if (by_page) {
-            traffic <- traffic %>%
-                dplyr::group_by(.data$page_path)
-        } else {
-            traffic <- traffic %>%
-                dplyr::mutate(page_category = "insights") %>%
-                dplyr::group_by(.data$insights)
-        }
-    }
-
-    traffic <- traffic %>% dplyr::summarise(
-            users = sum(.data$users),
-            sessions = sum(.data$sessions),
-            pageviews = sum(.data$pageviews),
-            unique_pageviews = sum(.data$unique_pageviews)) %>%
-        dplyr::ungroup()
-
-    if (by_page && merge_paths) traffic <- merge_paths(traffic, by_date)
-    traffic
 }
 
 # Individual pages: Commons Library microsite ---------------------------------
