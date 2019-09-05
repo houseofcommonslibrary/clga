@@ -58,40 +58,48 @@ fetch_rb_traffic_public_by_filter <- function(
     if (end < as.Date(DATE_START_RB_NEW)) {
 
         traffic <- fetch_traffic(
-            view_id = VIEW_ID_RB_OLD,
-            start_date = start_date,
-            end_date = end_date,
-            dimensions = dimensions,
-            dim_filters = dim_filters,
-            anti_sample = anti_sample)
+                view_id = VIEW_ID_RB_OLD,
+                start_date = start_date,
+                end_date = end_date,
+                dimensions = dimensions,
+                dim_filters = dim_filters,
+                anti_sample = anti_sample) %>%
+            dplyr::mutate(property = LABEL_RB_PUBLIC_OLD) %>%
+            dplyr::select(.data$property, dplyr::everything())
 
     } else if (start > as.Date(DATE_END_RB_OLD)) {
 
         traffic <- fetch_traffic(
-            view_id = VIEW_ID_RB_NEW,
-            start_date = start_date,
-            end_date = end_date,
-            dimensions = dimensions,
-            dim_filters = dim_filters,
-            anti_sample = anti_sample)
+                view_id = VIEW_ID_RB_NEW,
+                start_date = start_date,
+                end_date = end_date,
+                dimensions = dimensions,
+                dim_filters = dim_filters,
+                anti_sample = anti_sample) %>%
+            dplyr::mutate(property = LABEL_RB_PUBLIC_NEW) %>%
+            dplyr::select(.data$property, dplyr::everything())
 
     } else {
 
         traffic <- dplyr::bind_rows(
             fetch_traffic(
-                view_id = VIEW_ID_RB_OLD,
-                start_date = start_date,
-                end_date = DATE_END_RB_OLD,
-                dimensions = dimensions,
-                dim_filters = dim_filters,
-                anti_sample = anti_sample),
+                    view_id = VIEW_ID_RB_OLD,
+                    start_date = start_date,
+                    end_date = DATE_END_RB_OLD,
+                    dimensions = dimensions,
+                    dim_filters = dim_filters,
+                    anti_sample = anti_sample) %>%
+                dplyr::mutate(property = LABEL_RB_PUBLIC_OLD) %>%
+                dplyr::select(.data$property, dplyr::everything()),
             fetch_traffic(
-                view_id = VIEW_ID_RB_NEW,
-                start_date = DATE_START_RB_NEW,
-                end_date = end_date,
-                dimensions = dimensions,
-                dim_filters = dim_filters,
-                anti_sample = anti_sample))
+                    view_id = VIEW_ID_RB_NEW,
+                    start_date = DATE_START_RB_NEW,
+                    end_date = end_date,
+                    dimensions = dimensions,
+                    dim_filters = dim_filters,
+                    anti_sample = anti_sample) %>%
+                dplyr::mutate(property = LABEL_RB_PUBLIC_NEW) %>%
+                dplyr::select(.data$property, dplyr::everything()))
     }
 
     if (by_page && merge_paths) traffic <- merge_paths(traffic, by_date)
@@ -283,12 +291,14 @@ fetch_rb_traffic_intranet_by_filter <- function(
     if (by_page) dimensions <- c(dimensions, "pagePath")
 
     traffic <- fetch_traffic(
-        view_id = VIEW_ID_RB_INTRANET,
-        start_date = start_date,
-        end_date = end_date,
-        dimensions = dimensions,
-        dim_filters = dim_filters,
-        anti_sample = anti_sample)
+            view_id = VIEW_ID_RB_INTRANET,
+            start_date = start_date,
+            end_date = end_date,
+            dimensions = dimensions,
+            dim_filters = dim_filters,
+            anti_sample = anti_sample) %>%
+        dplyr::mutate(property = LABEL_RB_INTRANET) %>%
+        dplyr::select(.data$property, dplyr::everything())
 
     if (by_page && merge_paths) traffic <- merge_paths(traffic, by_date)
     traffic
@@ -419,8 +429,11 @@ fetch_rb_traffic_intranet <- function(
 #' tibble. You must provide matching fetch_* functions for each view.
 #'
 #' The data can either be combined so that each result appears once with
-#' totals across both the Parliament website and the intranet, or reported
-#' separately with separate rows for the website and the intranet.
+#' totals across all properties for the Parliament website and the intranet,
+#' or reported separately with separate rows for each property.
+#'
+#' If \code{combine} and \code{merge_paths} are both set to TRUE, rows for
+#' different properties are combined before they are merged.
 #'
 #' @param fetch_public A \code{fetch_*_public} function for a set of briefings.
 #' @param fetch_intranet A \code{fetch_*_intranet} function for a set of
@@ -441,11 +454,11 @@ fetch_rb_traffic_intranet <- function(
 #'   individual pages it can introduce small errors in the number of users by
 #'   page, as the same user may visit the same page through URLs with different
 #'   query strings. The default value is FALSE.
-#' @param combined A boolean indicating whether to combine the totals from
-#'   the website and the intranet or to report them separately. Note that
-#'   combining the traffic across both properties can introduce errors in
-#'   the number of users, as the same user may visit pages on both properties.
-#'   The default is FALSE.
+#' @param combine A boolean indicating whether to combine the totals from
+#'   different properties or to report them separately. Note that combining the
+#'   traffic across properties can introduce errors in the number of users, as
+#'   the same user may visit pages on different properties. The default is
+#'   FALSE.
 #' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
 #'   anti-sample feature, which chunks API calls to keep the number of records
 #'   requested under the API limits that trigger sampling. This makes the
@@ -464,7 +477,7 @@ fetch_rb_traffic_all_sources <- function(
     by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE,
-    combined = FALSE,
+    combine = FALSE,
     anti_sample = FALSE) {
 
     public <- fetch_public(
@@ -473,7 +486,6 @@ fetch_rb_traffic_all_sources <- function(
         internal = internal,
         by_date = by_date,
         by_page = by_page,
-        merge_paths = merge_paths,
         anti_sample = anti_sample)
 
     intranet <- fetch_intranet(
@@ -481,10 +493,9 @@ fetch_rb_traffic_all_sources <- function(
         end_date = end_date,
         by_date = by_date,
         by_page = by_page,
-        merge_paths = merge_paths,
         anti_sample = anti_sample)
 
-    if (combined) {
+    if (combine) {
 
         if (by_date) {
 
@@ -503,12 +514,12 @@ fetch_rb_traffic_all_sources <- function(
                     dplyr::group_by(.data$page_path)
             } else {
                 all <- dplyr::bind_rows(public, intranet) %>%
-                    dplyr::mutate(website = "combined") %>%
-                    dplyr::group_by(.data$website)
+                    dplyr::mutate(property = LABEL_RB_COMBINED) %>%
+                    dplyr::group_by(.data$property)
             }
         }
 
-        all %>% dplyr::summarise(
+        traffic <- all %>% dplyr::summarise(
                 users = sum(.data$users),
                 sessions = sum(.data$sessions),
                 pageviews = sum(.data$pageviews),
@@ -517,42 +528,11 @@ fetch_rb_traffic_all_sources <- function(
 
     } else {
 
-        public$website <- LABEL_PUBLIC
-        intranet$website <- LABEL_INTRANET
-
-        if (by_date) {
-
-            if (by_page) {
-                dplyr::bind_rows(public, intranet) %>%
-                    dplyr::select(
-                        .data$date,
-                        .data$page_path,
-                        .data$website,
-                        dplyr::everything())
-            } else {
-                dplyr::bind_rows(public, intranet) %>%
-                    dplyr::select(
-                        .data$date,
-                        .data$website,
-                        dplyr::everything())
-            }
-
-        } else {
-
-            if (by_page) {
-                dplyr::bind_rows(public, intranet) %>%
-                    dplyr::select(
-                        .data$page_path,
-                        .data$website,
-                        dplyr::everything())
-            } else {
-                dplyr::bind_rows(public, intranet) %>%
-                    dplyr::select(
-                        .data$website,
-                        dplyr::everything())
-            }
-        }
+        traffic <- dplyr::bind_rows(public, intranet)
     }
+
+    if (by_page && merge_paths) traffic <- merge_paths(traffic, by_date)
+    traffic
 }
 
 #' Download traffic data for all pages in both the research briefings view
@@ -563,8 +543,11 @@ fetch_rb_traffic_all_sources <- function(
 #' intranet during the given dates and returns the data as a tibble.
 #'
 #' The data can either be combined so that each result appears once with
-#' totals across both the Parliament website and the intranet, or reported
-#' separately with separate rows for the website and the intranet.
+#' totals across all properties for the Parliament website and the intranet,
+#' or reported separately with separate rows for each property.
+#'
+#' If \code{combine} and \code{merge_paths} are both set to TRUE, rows for
+#' different properties are combined before they are merged.
 #'
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
@@ -581,11 +564,11 @@ fetch_rb_traffic_all_sources <- function(
 #'   individual pages it can introduce small errors in the number of users by
 #'   page, as the same user may visit the same page through URLs with different
 #'   query strings. The default value is FALSE.
-#' @param combined A boolean indicating whether to combine the totals from
-#'   the website and the intranet or to report them separately. Note that
-#'   combining the traffic across both properties can introduce errors in
-#'   the number of users, as the same user may visit pages on both properties.
-#'   The default is FALSE.
+#' @param combine A boolean indicating whether to combine the totals from
+#'   different properties or to report them separately. Note that combining the
+#'   traffic across properties can introduce errors in the number of users, as
+#'   the same user may visit pages on different properties. The default is
+#'   FALSE.
 #' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
 #'   anti-sample feature, which chunks API calls to keep the number of records
 #'   requested under the API limits that trigger sampling. This makes the
@@ -602,7 +585,7 @@ fetch_rb_traffic <- function(
     by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE,
-    combined = FALSE,
+    combine = FALSE,
     anti_sample = FALSE) {
 
     fetch_rb_traffic_all_sources(
@@ -614,7 +597,7 @@ fetch_rb_traffic <- function(
         by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths,
-        combined = combined,
+        combine = combine,
         anti_sample = anti_sample)
 }
 
@@ -894,7 +877,7 @@ fetch_traffic_for_rb <- function(
     } else {
 
         if (nrow(public) > 0) public$website <- LABEL_PUBLIC
-        if (nrow(intranet) > 0) intranet$website <- LABEL_INTRANET
+        if (nrow(intranet) > 0) intranet$website <- LABEL_RB_INTRANET
         traffic <- dplyr::bind_rows(public, intranet)
 
         if (by_date) {

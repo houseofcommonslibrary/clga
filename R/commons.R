@@ -345,8 +345,11 @@ fetch_cdp_traffic_intranet <- function(
 #' tibble.
 #'
 #' The data can either be combined so that each result appears once with
-#' totals across both the Parliament website and the intranet, or reported
-#' separately with separate rows for the website and the intranet.
+#' totals across all properties for the Parliament website and the intranet,
+#' or reported separately with separate rows for each property.
+#'
+#' If \code{combine} and \code{merge_paths} are both set to TRUE, rows for
+#' different properties are combined before they are merged.
 #'
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
@@ -363,11 +366,11 @@ fetch_cdp_traffic_intranet <- function(
 #'   individual pages it can introduce small errors in the number of users by
 #'   page, as the same user may visit the same page through URLs with different
 #'   query strings. The default value is FALSE.
-#' @param combined A boolean indicating whether to combine the totals from
-#'   the website and the intranet or to report them separately. Note that
-#'   combining the traffic across both properties can introduce errors in
-#'   the number of users, as the same user may visit pages on both properties.
-#'   The default is FALSE.
+#' @param combine A boolean indicating whether to combine the totals from
+#'   different properties or to report them separately. Note that combining the
+#'   traffic across properties can introduce errors in the number of users, as
+#'   the same user may visit pages on different properties. The default is
+#'   FALSE.
 #' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
 #'   anti-sample feature, which chunks API calls to keep the number of records
 #'   requested under the API limits that trigger sampling. This makes the
@@ -384,7 +387,7 @@ fetch_crb_traffic <- function(
     by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE,
-    combined = FALSE,
+    combine = FALSE,
     anti_sample = FALSE) {
 
     fetch_rb_traffic_all_sources(
@@ -396,7 +399,7 @@ fetch_crb_traffic <- function(
         by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths,
-        combined = combined,
+        combine = combine,
         anti_sample = anti_sample)
 }
 
@@ -408,8 +411,11 @@ fetch_crb_traffic <- function(
 #' intranet during the given dates and returns the data as a tibble.
 #'
 #' The data can either be combined so that each result appears once with
-#' totals across both the Parliament website and the intranet, or reported
-#' separately with separate rows for the website and the intranet.
+#' totals across all properties for the Parliament website and the intranet,
+#' or reported separately with separate rows for each property.
+#'
+#' If \code{combine} and \code{merge_paths} are both set to TRUE, rows for
+#' different properties are combined before they are merged.
 #'
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
@@ -426,11 +432,11 @@ fetch_crb_traffic <- function(
 #'   individual pages it can introduce small errors in the number of users by
 #'   page, as the same user may visit the same page through URLs with different
 #'   query strings. The default value is FALSE.
-#' @param combined A boolean indicating whether to combine the totals from
-#'   the website and the intranet or to report them separately. Note that
-#'   combining the traffic across both properties can introduce errors in
-#'   the number of users, as the same user may visit pages on both properties.
-#'   The default is FALSE.
+#' @param combine A boolean indicating whether to combine the totals from
+#'   different properties or to report them separately. Note that combining the
+#'   traffic across properties can introduce errors in the number of users, as
+#'   the same user may visit pages on different properties. The default is
+#'   FALSE.
 #' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
 #'   anti-sample feature, which chunks API calls to keep the number of records
 #'   requested under the API limits that trigger sampling. This makes the
@@ -447,7 +453,7 @@ fetch_cbp_traffic <- function(
     by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE,
-    combined = FALSE,
+    combine = FALSE,
     anti_sample = FALSE) {
 
     fetch_rb_traffic_all_sources(
@@ -459,7 +465,7 @@ fetch_cbp_traffic <- function(
         by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths,
-        combined = combined,
+        combine = combine,
         anti_sample = anti_sample)
 }
 
@@ -471,8 +477,11 @@ fetch_cbp_traffic <- function(
 #' intranet during the given dates and returns the data as a tibble.
 #'
 #' The data can either be combined so that each result appears once with
-#' totals across both the Parliament website and the intranet, or reported
-#' separately with separate rows for the website and the intranet.
+#' totals across all properties for the Parliament website and the intranet,
+#' or reported separately with separate rows for each property.
+#'
+#' If \code{combine} and \code{merge_paths} are both set to TRUE, rows for
+#' different properties are combined before they are merged.
 #'
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
@@ -489,11 +498,11 @@ fetch_cbp_traffic <- function(
 #'   individual pages it can introduce small errors in the number of users by
 #'   page, as the same user may visit the same page through URLs with different
 #'   query strings. The default value is FALSE.
-#' @param combined A boolean indicating whether to combine the totals from
-#'   the website and the intranet or to report them separately. Note that
-#'   combining the traffic across both properties can introduce errors in
-#'   the number of users, as the same user may visit pages on both properties.
-#'   The default is FALSE.
+#' @param combine A boolean indicating whether to combine the totals from
+#'   different properties or to report them separately. Note that combining the
+#'   traffic across properties can introduce errors in the number of users, as
+#'   the same user may visit pages on different properties. The default is
+#'   FALSE.
 #' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
 #'   anti-sample feature, which chunks API calls to keep the number of records
 #'   requested under the API limits that trigger sampling. This makes the
@@ -510,7 +519,7 @@ fetch_cdp_traffic <- function(
     by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE,
-    combined = FALSE,
+    combine = FALSE,
     anti_sample = FALSE) {
 
     fetch_rb_traffic_all_sources(
@@ -522,6 +531,6 @@ fetch_cdp_traffic <- function(
         by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths,
-        combined = combined,
+        combine = combine,
         anti_sample = anti_sample)
 }

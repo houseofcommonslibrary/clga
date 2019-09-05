@@ -23,6 +23,8 @@ PATH_REGEXP_MS_COLLECTIONS <- "^\\/(\\?.{0,})$|^\\/[a-zA-Z0-9_\\-]{1,}\\/$|^\\/c
 
 NETWORK_REGEXP_INTERNAL <- "^(the house of commons|parliamentary ict)$"
 
-LABEL_PUBLIC <- "public"
-LABEL_INTRANET <- "intranet"
+LABEL_RB_PUBLIC_OLD <- "public-old"
+LABEL_RB_PUBLIC_NEW <- "public-new"
+LABEL_RB_INTRANET <- "intranet"
+LABEL_RB_COMBINED <- "combined"
 

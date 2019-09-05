@@ -45,7 +45,7 @@ merge_paths <- function(traffic, by_date) {
 
     if (by_date) expected_colnames <- c("date", expected_colnames)
 
-    if (! all(colnames(traffic) == expected_colnames)) {
+    if (! all(expected_colnames %in% colnames(traffic))) {
         stop("traffic data does not have the expected columns")
     }
 
