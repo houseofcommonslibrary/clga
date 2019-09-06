@@ -16,12 +16,12 @@ get_path_from_url <- function(url) {
 
 #' Aggregate metrics for all pages that have the same root path
 #'
-#' \code{merge_paths} takes a tibble of traffic metrics by date and and page
-#'  and sums the metrics for all pages that have the same path i.e. for all
-#'  pages whose paths differ only by their query string.
+#' \code{merge_paths} takes a tibble of traffic metrics by property, date and
+#'  page and sums the metrics for all pages that have the same path i.e. for
+#'  all pages whose paths differ only by their query string and internal links.
 #'
-#' @param traffic A tibble of traffic metrics by date and page path returned
-#'   from one of the fetch_*_traffic functions.
+#' @param traffic A tibble of traffic metrics by property, date and page path
+#'   returned from one of the fetch_*_traffic functions.
 #' @param by_date A boolean indicating whether the results are broken down by
 #'   date.
 #' @return A tibble with the same column structure as the input tibble where
@@ -44,17 +44,20 @@ merge_paths <- function(traffic, by_date) {
         "unique_pageviews")
 
     if (by_date) expected_colnames <- c("date", expected_colnames)
+    expected_colnames <- c("property", expected_colnames)
 
-    if (! all(expected_colnames %in% colnames(traffic))) {
+    if (! all(expected_colnames == colnames(traffic))) {
         stop("traffic data does not have the expected columns")
     }
 
     traffic$page_path <- stringr::str_extract(traffic$page_path,"[^?#]+")
 
     if (by_date) {
-        traffic <- traffic %>% dplyr::group_by(.data$date, .data$page_path)
+        traffic <- traffic %>% dplyr::group_by(
+            .data$property, .data$date, .data$page_path)
     } else {
-        traffic <- traffic %>% dplyr::group_by(.data$page_path)
+        traffic <- traffic %>% dplyr::group_by(
+            .data$property, .data$page_path)
     }
 
     traffic %>%

@@ -5,8 +5,8 @@
 \title{Download traffic data for all pages in the research briefings view}
 \usage{
 fetch_rb_traffic_public(start_date, end_date, internal = FALSE,
-  by_date = FALSE, by_page = FALSE, merge_paths = FALSE,
-  anti_sample = FALSE)
+  by_date = FALSE, by_page = FALSE, combine = FALSE,
+  merge_paths = FALSE, anti_sample = FALSE)
 }
 \arguments{
 \item{start_date}{The start date as an ISO 8601 string.}
@@ -22,13 +22,19 @@ down by date. The default is FALSE.}
 \item{by_page}{A boolean indicating whether to return the results broken
 down by page. The default is FALSE.}
 
-\item{merge_paths}{A boolean indicating whether to aggregate metrics for all
+\item{combine}{A boolean indicating whether to combine the totals from
+different properties or to report them separately. Note that combining the
+traffic across properties can introduce errors in the number of users, as
+the same user may visit pages on different properties. The default is
+FALSE.}
+
+\item{merge_paths}{A boolean indicating whether to aggregate figures for all
 pages that have the same root path i.e. for all pages whose paths differ
-only by their query string. This parameter is ignored if \code{by_page} is
-set to FALSE. Note that while merging paths is necessary for analysis of
-individual pages it can introduce small errors in the number of users by
-page, as the same user may visit the same page through URLs with different
-query strings. The default value is FALSE.}
+only by their query strings or internal anchors. This parameter is ignored
+if \code{by_page} is set to FALSE. Note that while merging paths is
+necessary for analysis of individual pages it can introduce errors in the
+number of users by page, as the same user may visit the same page through
+URLs with different query strings and anchors. The default value is FALSE.}
 
 \item{anti_sample}{A boolean indicating whether to use googleAnalyticsR's
 anti-sample feature, which chunks API calls to keep the number of records
@@ -50,4 +56,24 @@ Note that this is not all research briefings traffic, as it does not include
 traffic to the research briefings pages on the Parliamentary intranet. Use
 \code{fetch_rb_traffic_intranet} to retrieve equivalent data for the
 Parliamentary intranet.
+
+By default, traffic figures are reported separately for each website
+property in Google Analytics that contains some of the requested data. You
+can use the \code{combine} argument to optionally combine traffic figures
+so that each result appears only once with figures totalled across all
+relevant properties. This makes it easier to produce aggregate figures for
+traffic across a number of properties, but may introduce errors in the
+number of users, as the same user may visit pages on different properties.
+
+Traffic figures can be requested by page. Google Analytics treats webpages
+requested with different query strings and section anchors as different
+pages in its traffic data. You can use the \code{merge_paths} argument to
+optionally sum the figures for pages with the same base path. This makes it
+easier to calculcate the total number of views each distinct page has
+received, but note that this may introduce errors in the number of users, as
+a user may visit the same page using URLs with different query strings and
+anchors.
+
+If \code{combine} and \code{merge_paths} are both set to TRUE, rows for
+different properties are combined before paths are merged.
 }

@@ -6,8 +6,7 @@
 with the given filters}
 \usage{
 fetch_ms_traffic_by_filter(start_date, end_date, by_date = FALSE,
-  by_page = FALSE, merge_paths = FALSE, dim_filters = NULL,
-  anti_sample = FALSE)
+  by_page = FALSE, dim_filters = NULL, anti_sample = FALSE)
 }
 \arguments{
 \item{start_date}{The start date as an ISO 8601 string.}
@@ -19,14 +18,6 @@ down by date. The default is FALSE.}
 
 \item{by_page}{A boolean indicating whether to return the results broken
 down by individual page. The default is FALSE.}
-
-\item{merge_paths}{A boolean indicating whether to aggregate metrics for all
-pages that have the same root path i.e. for all pages whose paths differ
-only by their query string. This parameter is ignored if \code{by_page} is
-set to FALSE. Note that while merging paths is necessary for analysis of
-individual pages it can introduce small errors in the number of users by
-page, as the same user may visit the same page through URLs with different
-query strings. The default value is FALSE.}
 
 \item{dim_filters}{A set of dimension filters to constrain the results. The
 default is NULL.}
@@ -46,3 +37,4 @@ A tibble of traffic metrics.
 the Commons Library microsite during the given dates, with the given
 filters, and returns the data as a tibble.
 }
+\keyword{internal}

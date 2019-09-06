@@ -19,13 +19,13 @@ down by date. The default is FALSE.}
 \item{by_page}{A boolean indicating whether to return the results broken
 down by page. The default is FALSE.}
 
-\item{merge_paths}{A boolean indicating whether to aggregate metrics for all
+\item{merge_paths}{A boolean indicating whether to aggregate figures for all
 pages that have the same root path i.e. for all pages whose paths differ
-only by their query string. This parameter is ignored if \code{by_page} is
-set to FALSE. Note that while merging paths is necessary for analysis of
-individual pages it can introduce small errors in the number of users by
-page, as the same user may visit the same page through URLs with different
-query strings. The default value is FALSE.}
+only by their query strings or internal anchors. This parameter is ignored
+if \code{by_page} is set to FALSE. Note that while merging paths is
+necessary for analysis of individual pages it can introduce errors in the
+number of users by page, as the same user may visit the same page through
+URLs with different query strings and anchors. The default value is FALSE.}
 
 \item{anti_sample}{A boolean indicating whether to use googleAnalyticsR's
 anti-sample feature, which chunks API calls to keep the number of records
@@ -48,4 +48,13 @@ Note that this is not all debate pack traffic, as it does not include
 traffic to the debate pack pages on the main Parliament website. Use
 \code{fetch_cdp_traffic_public} to retrieve equivalent data for the main
 Parliament website.
+
+Traffic figures can be requested by page. Google Analytics treats webpages
+requested with different query strings and section anchors as different
+pages in its traffic data. You can use the \code{merge_paths} argument to
+optionally sum the figures for pages with the same base path. This makes it
+easier to calculcate the total number of views each distinct page has
+received, but note that this may introduce errors in the number of users, as
+a user may visit the same page using URLs with different query strings and
+anchors.
 }

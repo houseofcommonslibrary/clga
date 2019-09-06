@@ -6,7 +6,7 @@
 Parliament website and the Parliamentary intranet}
 \usage{
 fetch_traffic_for_rb(url, start_date, end_date, internal = FALSE,
-  by_date = FALSE, combined = FALSE, anti_sample = FALSE)
+  by_date = FALSE, combine = FALSE, anti_sample = FALSE)
 }
 \arguments{
 \item{url}{The URL of a page for which traffic data is requested.}
@@ -21,11 +21,11 @@ traffic from internal parliamentary networks. The default is FALSE.}
 \item{by_date}{A boolean indicating whether to return the results broken
 down by date. The default is FALSE.}
 
-\item{combined}{A boolean indicating whether to combine the totals from
-the website and the intranet or to report them separately. Note that
-combining the traffic across both properties can introduce errors in
-the number of users, as the same user may visit pages on both properties.
-The default is FALSE.}
+\item{combine}{A boolean indicating whether to combine the totals from
+different properties or to report them separately. Note that combining the
+traffic across properties can introduce errors in the number of users, as
+the same user may visit pages on different properties. The default is
+FALSE.}
 
 \item{anti_sample}{A boolean indicating whether to use googleAnalyticsR's
 anti-sample feature, which chunks API calls to keep the number of records
@@ -44,7 +44,11 @@ Parliamentary intranet during the given dates and returns the data as a
 tibble.
 }
 \details{
-The data can either be combined so that each result appears once with
-totals across both the Parliament website and the intranet, or reported
-separately with separate rows for the website and the intranet.
+By default, traffic figures are reported separately for each website
+property in Google Analytics that contains some of the requested data. You
+can use the \code{combine} argument to optionally combine traffic figures
+so that each result appears only once with figures totalled across all
+relevant properties. This makes it easier to produce aggregate figures for
+traffic across a number of properties, but may introduce errors in the
+number of users, as the same user may visit pages on different properties.
 }

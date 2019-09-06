@@ -6,8 +6,8 @@
 Library microsite}
 \usage{
 fetch_ms_traffic_by_category(start_date, end_date, category,
-  internal = FALSE, by_date = FALSE, by_page = FALSE,
-  merge_paths = FALSE, anti_sample = FALSE)
+  exclude_lists = TRUE, internal = FALSE, by_date = FALSE,
+  by_page = FALSE, merge_paths = FALSE, anti_sample = FALSE)
 }
 \arguments{
 \item{start_date}{The start date as an ISO 8601 string.}
@@ -16,6 +16,8 @@ fetch_ms_traffic_by_category(start_date, end_date, category,
 
 \item{category}{A string representing a category name to filter for with a
 partial match as a string.}
+
+\item{exclude_lists}{Exclude list pages from results. The default is TRUE.}
 
 \item{internal}{A boolean indicating whether to return only the results for
 traffic from internal parliamentary networks. The default is FALSE.}
@@ -26,13 +28,13 @@ down by date. The default is FALSE.}
 \item{by_page}{A boolean indicating whether to return the results broken
 down by individual page. The default is FALSE.}
 
-\item{merge_paths}{A boolean indicating whether to aggregate metrics for all
+\item{merge_paths}{A boolean indicating whether to aggregate figures for all
 pages that have the same root path i.e. for all pages whose paths differ
-only by their query string. This parameter is ignored if \code{by_page} is
-set to FALSE. Note that while merging paths is necessary for analysis of
-individual pages it can introduce small errors in the number of users by
-page, as the same user may visit the same page through URLs with different
-query strings. The default value is FALSE.}
+only by their query strings or internal anchors. This parameter is ignored
+if \code{by_page} is set to FALSE. Note that while merging paths is
+necessary for analysis of individual pages it can introduce errors in the
+number of users by page, as the same user may visit the same page through
+URLs with different query strings and anchors. The default value is FALSE.}
 
 \item{anti_sample}{A boolean indicating whether to use googleAnalyticsR's
 anti-sample feature, which chunks API calls to keep the number of records
@@ -48,4 +50,21 @@ A tibble of traffic metrics.
 \code{fetch_ms_traffic_by_category} downloads data on traffic metrics for
 specific types of posts based on the categories they have been assigend in
 wordpress during the given dates and returns the data as a tibble.
+}
+\details{
+The specific catgeories are identified using a partial, case-insensitive
+string match against the custom dimension "dimension1" which lists all tags
+associated with each page. By default this includes list pages that contain
+posts with those tags, such as the homepage and the category pages. The
+\code{exclude_lists} argument is used to exclude these pages from the
+results and it is enabed by default.
+
+Traffic figures can be requested by page. Google Analytics treats webpages
+requested with different query strings and section anchors as different
+pages in its traffic data. You can use the \code{merge_paths} argument to
+optionally sum the figures for pages with the same base path. This makes it
+easier to calculcate the total number of views each distinct page has
+received, but note that this may introduce errors in the number of users, as
+a user may visit the same page using URLs with different query strings and
+anchors.
 }

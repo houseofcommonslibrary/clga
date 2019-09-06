@@ -15,6 +15,26 @@
 #' intranet. Use \code{fetch_crb_traffic_intranet} to retrieve equivalent data
 #' for the Parliamentary intranet.
 #'
+#' By default, traffic figures are reported separately for each website
+#' property in Google Analytics that contains some of the requested data. You
+#' can use the \code{combine} argument to optionally combine traffic figures
+#' so that each result appears only once with figures totalled across all
+#' relevant properties. This makes it easier to produce aggregate figures for
+#' traffic across a number of properties, but may introduce errors in the
+#' number of users, as the same user may visit pages on different properties.
+#'
+#' Traffic figures can be requested by page. Google Analytics treats webpages
+#' requested with different query strings and section anchors as different
+#' pages in its traffic data. You can use the \code{merge_paths} argument to
+#' optionally sum the figures for pages with the same base path. This makes it
+#' easier to calculcate the total number of views each distinct page has
+#' received, but note that this may introduce errors in the number of users, as
+#' a user may visit the same page using URLs with different query strings and
+#' anchors.
+#'
+#' If \code{combine} and \code{merge_paths} are both set to TRUE, rows for
+#' different properties are combined before paths are merged.
+#'
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
 #' @param internal A boolean indicating whether to return only the results for
@@ -23,13 +43,18 @@
 #'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
 #'   down by page. The default is FALSE.
-#' @param merge_paths A boolean indicating whether to aggregate metrics for all
+#' @param combine A boolean indicating whether to combine the totals from
+#'   different properties or to report them separately. Note that combining the
+#'   traffic across properties can introduce errors in the number of users, as
+#'   the same user may visit pages on different properties. The default is
+#'   FALSE.
+#' @param merge_paths A boolean indicating whether to aggregate figures for all
 #'   pages that have the same root path i.e. for all pages whose paths differ
-#'   only by their query string. This parameter is ignored if \code{by_page} is
-#'   set to FALSE. Note that while merging paths is necessary for analysis of
-#'   individual pages it can introduce small errors in the number of users by
-#'   page, as the same user may visit the same page through URLs with different
-#'   query strings. The default value is FALSE.
+#'   only by their query strings or internal anchors. This parameter is ignored
+#'   if \code{by_page} is set to FALSE. Note that while merging paths is
+#'   necessary for analysis of individual pages it can introduce errors in the
+#'   number of users by page, as the same user may visit the same page through
+#'   URLs with different query strings and anchors. The default value is FALSE.
 #' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
 #'   anti-sample feature, which chunks API calls to keep the number of records
 #'   requested under the API limits that trigger sampling. This makes the
@@ -45,6 +70,7 @@ fetch_crb_traffic_public <- function(
     internal = FALSE,
     by_date = FALSE,
     by_page = FALSE,
+    combine = FALSE,
     merge_paths = FALSE,
     anti_sample = FALSE) {
 
@@ -55,6 +81,7 @@ fetch_crb_traffic_public <- function(
         internal = internal,
         by_date = by_date,
         by_page = by_page,
+        combine = combine,
         merge_paths = merge_paths,
         anti_sample = anti_sample)
 }
@@ -72,6 +99,26 @@ fetch_crb_traffic_public <- function(
 #' Use \code{fetch_cbp_traffic_intranet} to retrieve equivalent data for
 #' the Parliamentary intranet.
 #'
+#' By default, traffic figures are reported separately for each website
+#' property in Google Analytics that contains some of the requested data. You
+#' can use the \code{combine} argument to optionally combine traffic figures
+#' so that each result appears only once with figures totalled across all
+#' relevant properties. This makes it easier to produce aggregate figures for
+#' traffic across a number of properties, but may introduce errors in the
+#' number of users, as the same user may visit pages on different properties.
+#'
+#' Traffic figures can be requested by page. Google Analytics treats webpages
+#' requested with different query strings and section anchors as different
+#' pages in its traffic data. You can use the \code{merge_paths} argument to
+#' optionally sum the figures for pages with the same base path. This makes it
+#' easier to calculcate the total number of views each distinct page has
+#' received, but note that this may introduce errors in the number of users, as
+#' a user may visit the same page using URLs with different query strings and
+#' anchors.
+#'
+#' If \code{combine} and \code{merge_paths} are both set to TRUE, rows for
+#' different properties are combined before paths are merged.
+#'
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
 #' @param internal A boolean indicating whether to return only the results for
@@ -80,13 +127,18 @@ fetch_crb_traffic_public <- function(
 #'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
 #'   down by page. The default is FALSE.
-#' @param merge_paths A boolean indicating whether to aggregate metrics for all
+#' @param combine A boolean indicating whether to combine the totals from
+#'   different properties or to report them separately. Note that combining the
+#'   traffic across properties can introduce errors in the number of users, as
+#'   the same user may visit pages on different properties. The default is
+#'   FALSE.
+#' @param merge_paths A boolean indicating whether to aggregate figures for all
 #'   pages that have the same root path i.e. for all pages whose paths differ
-#'   only by their query string. This parameter is ignored if \code{by_page} is
-#'   set to FALSE. Note that while merging paths is necessary for analysis of
-#'   individual pages it can introduce small errors in the number of users by
-#'   page, as the same user may visit the same page through URLs with different
-#'   query strings. The default value is FALSE.
+#'   only by their query strings or internal anchors. This parameter is ignored
+#'   if \code{by_page} is set to FALSE. Note that while merging paths is
+#'   necessary for analysis of individual pages it can introduce errors in the
+#'   number of users by page, as the same user may visit the same page through
+#'   URLs with different query strings and anchors. The default value is FALSE.
 #' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
 #'   anti-sample feature, which chunks API calls to keep the number of records
 #'   requested under the API limits that trigger sampling. This makes the
@@ -102,6 +154,7 @@ fetch_cbp_traffic_public <- function(
     internal = FALSE,
     by_date = FALSE,
     by_page = FALSE,
+    combine = FALSE,
     merge_paths = FALSE,
     anti_sample = FALSE) {
 
@@ -112,6 +165,7 @@ fetch_cbp_traffic_public <- function(
         internal = internal,
         by_date = by_date,
         by_page = by_page,
+        combine = combine,
         merge_paths = merge_paths,
         anti_sample = anti_sample)
 }
@@ -129,6 +183,26 @@ fetch_cbp_traffic_public <- function(
 #' \code{fetch_cdp_traffic_intranet} to retrieve equivalent data for the
 #' Parliamentary intranet.
 #'
+#' By default, traffic figures are reported separately for each website
+#' property in Google Analytics that contains some of the requested data. You
+#' can use the \code{combine} argument to optionally combine traffic figures
+#' so that each result appears only once with figures totalled across all
+#' relevant properties. This makes it easier to produce aggregate figures for
+#' traffic across a number of properties, but may introduce errors in the
+#' number of users, as the same user may visit pages on different properties.
+#'
+#' Traffic figures can be requested by page. Google Analytics treats webpages
+#' requested with different query strings and section anchors as different
+#' pages in its traffic data. You can use the \code{merge_paths} argument to
+#' optionally sum the figures for pages with the same base path. This makes it
+#' easier to calculcate the total number of views each distinct page has
+#' received, but note that this may introduce errors in the number of users, as
+#' a user may visit the same page using URLs with different query strings and
+#' anchors.
+#'
+#' If \code{combine} and \code{merge_paths} are both set to TRUE, rows for
+#' different properties are combined before paths are merged.
+#'
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
 #' @param internal A boolean indicating whether to return only the results for
@@ -137,13 +211,18 @@ fetch_cbp_traffic_public <- function(
 #'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
 #'   down by page. The default is FALSE.
-#' @param merge_paths A boolean indicating whether to aggregate metrics for all
+#' @param combine A boolean indicating whether to combine the totals from
+#'   different properties or to report them separately. Note that combining the
+#'   traffic across properties can introduce errors in the number of users, as
+#'   the same user may visit pages on different properties. The default is
+#'   FALSE.
+#' @param merge_paths A boolean indicating whether to aggregate figures for all
 #'   pages that have the same root path i.e. for all pages whose paths differ
-#'   only by their query string. This parameter is ignored if \code{by_page} is
-#'   set to FALSE. Note that while merging paths is necessary for analysis of
-#'   individual pages it can introduce small errors in the number of users by
-#'   page, as the same user may visit the same page through URLs with different
-#'   query strings. The default value is FALSE.
+#'   only by their query strings or internal anchors. This parameter is ignored
+#'   if \code{by_page} is set to FALSE. Note that while merging paths is
+#'   necessary for analysis of individual pages it can introduce errors in the
+#'   number of users by page, as the same user may visit the same page through
+#'   URLs with different query strings and anchors. The default value is FALSE.
 #' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
 #'   anti-sample feature, which chunks API calls to keep the number of records
 #'   requested under the API limits that trigger sampling. This makes the
@@ -159,6 +238,7 @@ fetch_cdp_traffic_public <- function(
     internal = FALSE,
     by_date = FALSE,
     by_page = FALSE,
+    combine = FALSE,
     merge_paths = FALSE,
     anti_sample = FALSE) {
 
@@ -169,6 +249,7 @@ fetch_cdp_traffic_public <- function(
         internal = internal,
         by_date = by_date,
         by_page = by_page,
+        combine = combine,
         merge_paths = merge_paths,
         anti_sample = anti_sample)
 }
@@ -188,19 +269,28 @@ fetch_cdp_traffic_public <- function(
 #' \code{fetch_crb_traffic_public} to retrieve equivalent data for the main
 #' Parliament website.
 #'
+#' Traffic figures can be requested by page. Google Analytics treats webpages
+#' requested with different query strings and section anchors as different
+#' pages in its traffic data. You can use the \code{merge_paths} argument to
+#' optionally sum the figures for pages with the same base path. This makes it
+#' easier to calculcate the total number of views each distinct page has
+#' received, but note that this may introduce errors in the number of users, as
+#' a user may visit the same page using URLs with different query strings and
+#' anchors.
+#'
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
 #' @param by_date A boolean indicating whether to return the results broken
 #'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
 #'   down by page. The default is FALSE.
-#' @param merge_paths A boolean indicating whether to aggregate metrics for all
+#' @param merge_paths A boolean indicating whether to aggregate figures for all
 #'   pages that have the same root path i.e. for all pages whose paths differ
-#'   only by their query string. This parameter is ignored if \code{by_page} is
-#'   set to FALSE. Note that while merging paths is necessary for analysis of
-#'   individual pages it can introduce small errors in the number of users by
-#'   page, as the same user may visit the same page through URLs with different
-#'   query strings. The default value is FALSE.
+#'   only by their query strings or internal anchors. This parameter is ignored
+#'   if \code{by_page} is set to FALSE. Note that while merging paths is
+#'   necessary for analysis of individual pages it can introduce errors in the
+#'   number of users by page, as the same user may visit the same page through
+#'   URLs with different query strings and anchors. The default value is FALSE.
 #' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
 #'   anti-sample feature, which chunks API calls to keep the number of records
 #'   requested under the API limits that trigger sampling. This makes the
@@ -241,19 +331,28 @@ fetch_crb_traffic_intranet <- function(
 #' \code{fetch_cbp_traffic_public} to retrieve equivalent data for the main
 #' Parliament website.
 #'
+#' Traffic figures can be requested by page. Google Analytics treats webpages
+#' requested with different query strings and section anchors as different
+#' pages in its traffic data. You can use the \code{merge_paths} argument to
+#' optionally sum the figures for pages with the same base path. This makes it
+#' easier to calculcate the total number of views each distinct page has
+#' received, but note that this may introduce errors in the number of users, as
+#' a user may visit the same page using URLs with different query strings and
+#' anchors.
+#'
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
 #' @param by_date A boolean indicating whether to return the results broken
 #'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
 #'   down by page. The default is FALSE.
-#' @param merge_paths A boolean indicating whether to aggregate metrics for all
+#' @param merge_paths A boolean indicating whether to aggregate figures for all
 #'   pages that have the same root path i.e. for all pages whose paths differ
-#'   only by their query string. This parameter is ignored if \code{by_page} is
-#'   set to FALSE. Note that while merging paths is necessary for analysis of
-#'   individual pages it can introduce small errors in the number of users by
-#'   page, as the same user may visit the same page through URLs with different
-#'   query strings. The default value is FALSE.
+#'   only by their query strings or internal anchors. This parameter is ignored
+#'   if \code{by_page} is set to FALSE. Note that while merging paths is
+#'   necessary for analysis of individual pages it can introduce errors in the
+#'   number of users by page, as the same user may visit the same page through
+#'   URLs with different query strings and anchors. The default value is FALSE.
 #' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
 #'   anti-sample feature, which chunks API calls to keep the number of records
 #'   requested under the API limits that trigger sampling. This makes the
@@ -294,19 +393,28 @@ fetch_cbp_traffic_intranet <- function(
 #' \code{fetch_cdp_traffic_public} to retrieve equivalent data for the main
 #' Parliament website.
 #'
+#' Traffic figures can be requested by page. Google Analytics treats webpages
+#' requested with different query strings and section anchors as different
+#' pages in its traffic data. You can use the \code{merge_paths} argument to
+#' optionally sum the figures for pages with the same base path. This makes it
+#' easier to calculcate the total number of views each distinct page has
+#' received, but note that this may introduce errors in the number of users, as
+#' a user may visit the same page using URLs with different query strings and
+#' anchors.
+#'
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
 #' @param by_date A boolean indicating whether to return the results broken
 #'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
 #'   down by page. The default is FALSE.
-#' @param merge_paths A boolean indicating whether to aggregate metrics for all
+#' @param merge_paths A boolean indicating whether to aggregate figures for all
 #'   pages that have the same root path i.e. for all pages whose paths differ
-#'   only by their query string. This parameter is ignored if \code{by_page} is
-#'   set to FALSE. Note that while merging paths is necessary for analysis of
-#'   individual pages it can introduce small errors in the number of users by
-#'   page, as the same user may visit the same page through URLs with different
-#'   query strings. The default value is FALSE.
+#'   only by their query strings or internal anchors. This parameter is ignored
+#'   if \code{by_page} is set to FALSE. Note that while merging paths is
+#'   necessary for analysis of individual pages it can introduce errors in the
+#'   number of users by page, as the same user may visit the same page through
+#'   URLs with different query strings and anchors. The default value is FALSE.
 #' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
 #'   anti-sample feature, which chunks API calls to keep the number of records
 #'   requested under the API limits that trigger sampling. This makes the
@@ -348,8 +456,25 @@ fetch_cdp_traffic_intranet <- function(
 #' totals across all properties for the Parliament website and the intranet,
 #' or reported separately with separate rows for each property.
 #'
+#' By default, traffic figures are reported separately for each website
+#' property in Google Analytics that contains some of the requested data. You
+#' can use the \code{combine} argument to optionally combine traffic figures
+#' so that each result appears only once with figures totalled across all
+#' relevant properties. This makes it easier to produce aggregate figures for
+#' traffic across a number of properties, but may introduce errors in the
+#' number of users, as the same user may visit pages on different properties.
+#'
+#' Traffic figures can be requested by page. Google Analytics treats webpages
+#' requested with different query strings and section anchors as different
+#' pages in its traffic data. You can use the \code{merge_paths} argument to
+#' optionally sum the figures for pages with the same base path. This makes it
+#' easier to calculcate the total number of views each distinct page has
+#' received, but note that this may introduce errors in the number of users, as
+#' a user may visit the same page using URLs with different query strings and
+#' anchors.
+#'
 #' If \code{combine} and \code{merge_paths} are both set to TRUE, rows for
-#' different properties are combined before they are merged.
+#' different properties are combined before paths are merged.
 #'
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
@@ -359,18 +484,18 @@ fetch_cdp_traffic_intranet <- function(
 #'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
 #'   down by page. The default is FALSE.
-#' @param merge_paths A boolean indicating whether to aggregate metrics for all
-#'   pages that have the same root path i.e. for all pages whose paths differ
-#'   only by their query string. This parameter is ignored if \code{by_page} is
-#'   set to FALSE. Note that while merging paths is necessary for analysis of
-#'   individual pages it can introduce small errors in the number of users by
-#'   page, as the same user may visit the same page through URLs with different
-#'   query strings. The default value is FALSE.
 #' @param combine A boolean indicating whether to combine the totals from
 #'   different properties or to report them separately. Note that combining the
 #'   traffic across properties can introduce errors in the number of users, as
 #'   the same user may visit pages on different properties. The default is
 #'   FALSE.
+#' @param merge_paths A boolean indicating whether to aggregate figures for all
+#'   pages that have the same root path i.e. for all pages whose paths differ
+#'   only by their query strings or internal anchors. This parameter is ignored
+#'   if \code{by_page} is set to FALSE. Note that while merging paths is
+#'   necessary for analysis of individual pages it can introduce errors in the
+#'   number of users by page, as the same user may visit the same page through
+#'   URLs with different query strings and anchors. The default value is FALSE.
 #' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
 #'   anti-sample feature, which chunks API calls to keep the number of records
 #'   requested under the API limits that trigger sampling. This makes the
@@ -386,11 +511,11 @@ fetch_crb_traffic <- function(
     internal = FALSE,
     by_date = FALSE,
     by_page = FALSE,
-    merge_paths = FALSE,
     combine = FALSE,
+    merge_paths = FALSE,
     anti_sample = FALSE) {
 
-    fetch_rb_traffic_all_sources(
+    fetch_rb_traffic_all_properties(
         fetch_crb_traffic_public,
         fetch_crb_traffic_intranet,
         start_date = start_date,
@@ -398,8 +523,8 @@ fetch_crb_traffic <- function(
         internal = internal,
         by_date = by_date,
         by_page = by_page,
-        merge_paths = merge_paths,
         combine = combine,
+        merge_paths = merge_paths,
         anti_sample = anti_sample)
 }
 
@@ -410,12 +535,25 @@ fetch_crb_traffic <- function(
 #' briefing papers on both the public Parliament website and the Parliamentary
 #' intranet during the given dates and returns the data as a tibble.
 #'
-#' The data can either be combined so that each result appears once with
-#' totals across all properties for the Parliament website and the intranet,
-#' or reported separately with separate rows for each property.
+#' By default, traffic figures are reported separately for each website
+#' property in Google Analytics that contains some of the requested data. You
+#' can use the \code{combine} argument to optionally combine traffic figures
+#' so that each result appears only once with figures totalled across all
+#' relevant properties. This makes it easier to produce aggregate figures for
+#' traffic across a number of properties, but may introduce errors in the
+#' number of users, as the same user may visit pages on different properties.
+#'
+#' Traffic figures can be requested by page. Google Analytics treats webpages
+#' requested with different query strings and section anchors as different
+#' pages in its traffic data. You can use the \code{merge_paths} argument to
+#' optionally sum the figures for pages with the same base path. This makes it
+#' easier to calculcate the total number of views each distinct page has
+#' received, but note that this may introduce errors in the number of users, as
+#' a user may visit the same page using URLs with different query strings and
+#' anchors.
 #'
 #' If \code{combine} and \code{merge_paths} are both set to TRUE, rows for
-#' different properties are combined before they are merged.
+#' different properties are combined before paths are merged.
 #'
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
@@ -425,18 +563,18 @@ fetch_crb_traffic <- function(
 #'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
 #'   down by page. The default is FALSE.
-#' @param merge_paths A boolean indicating whether to aggregate metrics for all
-#'   pages that have the same root path i.e. for all pages whose paths differ
-#'   only by their query string. This parameter is ignored if \code{by_page} is
-#'   set to FALSE. Note that while merging paths is necessary for analysis of
-#'   individual pages it can introduce small errors in the number of users by
-#'   page, as the same user may visit the same page through URLs with different
-#'   query strings. The default value is FALSE.
 #' @param combine A boolean indicating whether to combine the totals from
 #'   different properties or to report them separately. Note that combining the
 #'   traffic across properties can introduce errors in the number of users, as
 #'   the same user may visit pages on different properties. The default is
 #'   FALSE.
+#' @param merge_paths A boolean indicating whether to aggregate figures for all
+#'   pages that have the same root path i.e. for all pages whose paths differ
+#'   only by their query strings or internal anchors. This parameter is ignored
+#'   if \code{by_page} is set to FALSE. Note that while merging paths is
+#'   necessary for analysis of individual pages it can introduce errors in the
+#'   number of users by page, as the same user may visit the same page through
+#'   URLs with different query strings and anchors. The default value is FALSE.
 #' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
 #'   anti-sample feature, which chunks API calls to keep the number of records
 #'   requested under the API limits that trigger sampling. This makes the
@@ -452,11 +590,11 @@ fetch_cbp_traffic <- function(
     internal = FALSE,
     by_date = FALSE,
     by_page = FALSE,
-    merge_paths = FALSE,
     combine = FALSE,
+    merge_paths = FALSE,
     anti_sample = FALSE) {
 
-    fetch_rb_traffic_all_sources(
+    fetch_rb_traffic_all_properties(
         fetch_cbp_traffic_public,
         fetch_cbp_traffic_intranet,
         start_date = start_date,
@@ -464,8 +602,8 @@ fetch_cbp_traffic <- function(
         internal = internal,
         by_date = by_date,
         by_page = by_page,
-        merge_paths = merge_paths,
         combine = combine,
+        merge_paths = merge_paths,
         anti_sample = anti_sample)
 }
 
@@ -476,12 +614,25 @@ fetch_cbp_traffic <- function(
 #' debate packs on both the public Parliament website and the Parliamentary
 #' intranet during the given dates and returns the data as a tibble.
 #'
-#' The data can either be combined so that each result appears once with
-#' totals across all properties for the Parliament website and the intranet,
-#' or reported separately with separate rows for each property.
+#' By default, traffic figures are reported separately for each website
+#' property in Google Analytics that contains some of the requested data. You
+#' can use the \code{combine} argument to optionally combine traffic figures
+#' so that each result appears only once with figures totalled across all
+#' relevant properties. This makes it easier to produce aggregate figures for
+#' traffic across a number of properties, but may introduce errors in the
+#' number of users, as the same user may visit pages on different properties.
+#'
+#' Traffic figures can be requested by page. Google Analytics treats webpages
+#' requested with different query strings and section anchors as different
+#' pages in its traffic data. You can use the \code{merge_paths} argument to
+#' optionally sum the figures for pages with the same base path. This makes it
+#' easier to calculcate the total number of views each distinct page has
+#' received, but note that this may introduce errors in the number of users, as
+#' a user may visit the same page using URLs with different query strings and
+#' anchors.
 #'
 #' If \code{combine} and \code{merge_paths} are both set to TRUE, rows for
-#' different properties are combined before they are merged.
+#' different properties are combined before paths are merged.
 #'
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
@@ -491,18 +642,18 @@ fetch_cbp_traffic <- function(
 #'   down by date. The default is FALSE.
 #' @param by_page A boolean indicating whether to return the results broken
 #'   down by page. The default is FALSE.
-#' @param merge_paths A boolean indicating whether to aggregate metrics for all
-#'   pages that have the same root path i.e. for all pages whose paths differ
-#'   only by their query string. This parameter is ignored if \code{by_page} is
-#'   set to FALSE. Note that while merging paths is necessary for analysis of
-#'   individual pages it can introduce small errors in the number of users by
-#'   page, as the same user may visit the same page through URLs with different
-#'   query strings. The default value is FALSE.
 #' @param combine A boolean indicating whether to combine the totals from
 #'   different properties or to report them separately. Note that combining the
 #'   traffic across properties can introduce errors in the number of users, as
 #'   the same user may visit pages on different properties. The default is
 #'   FALSE.
+#' @param merge_paths A boolean indicating whether to aggregate figures for all
+#'   pages that have the same root path i.e. for all pages whose paths differ
+#'   only by their query strings or internal anchors. This parameter is ignored
+#'   if \code{by_page} is set to FALSE. Note that while merging paths is
+#'   necessary for analysis of individual pages it can introduce errors in the
+#'   number of users by page, as the same user may visit the same page through
+#'   URLs with different query strings and anchors. The default value is FALSE.
 #' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
 #'   anti-sample feature, which chunks API calls to keep the number of records
 #'   requested under the API limits that trigger sampling. This makes the
@@ -518,11 +669,11 @@ fetch_cdp_traffic <- function(
     internal = FALSE,
     by_date = FALSE,
     by_page = FALSE,
-    merge_paths = FALSE,
     combine = FALSE,
+    merge_paths = FALSE,
     anti_sample = FALSE) {
 
-    fetch_rb_traffic_all_sources(
+    fetch_rb_traffic_all_properties(
         fetch_cdp_traffic_public,
         fetch_cdp_traffic_intranet,
         start_date = start_date,
@@ -530,7 +681,7 @@ fetch_cdp_traffic <- function(
         internal = internal,
         by_date = by_date,
         by_page = by_page,
-        merge_paths = merge_paths,
         combine = combine,
+        merge_paths = merge_paths,
         anti_sample = anti_sample)
 }
