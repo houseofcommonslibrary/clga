@@ -445,7 +445,6 @@ fetch_rb_traffic_intranet_by_type <- function(
         end_date = end_date,
         by_date = by_date,
         by_page = by_page,
-        merge_paths = merge_paths,
         dim_filters = dim_filters,
         anti_sample = anti_sample)
 
