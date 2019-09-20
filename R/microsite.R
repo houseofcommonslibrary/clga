@@ -491,7 +491,7 @@ fetch_traffic_for_ms <- function(
         dplyr::mutate(property = LABEL_MS) %>%
         dplyr::select(.data$property, dplyr::everything())
 
-    if (nrow(traffic) == 0) return(traffic)
+    if (nrow(traffic) == 0) tibble::tibble()
 
     traffic <- traffic %>% dplyr::mutate(page_path = page_path)
 
