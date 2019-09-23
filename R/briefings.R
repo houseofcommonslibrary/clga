@@ -1047,7 +1047,7 @@ fetch_traffic_for_rb <- function(
                 dplyr::group_by(.data$property, .data$date, .data$page_path)
         } else {
             traffic <- traffic %>%
-                dplyr::group_by(.data$property)
+                dplyr::group_by(.data$property, .data$page_path)
         }
 
         traffic <- traffic %>%
