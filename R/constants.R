@@ -30,3 +30,5 @@ LABEL_RB_PUBLIC_NEW <- "briefings-public-new"
 LABEL_RB_INTRANET <- "briefings-intranet"
 LABEL_RB_ALL <- "briefings-all"
 LABEL_MS <- "microsite"
+
+CATEGORY_DOWNLOADS <- c("download", "document")

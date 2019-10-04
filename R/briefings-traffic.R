@@ -37,7 +37,6 @@
 #'   takes precendence over anti-samping: if \code{use_resource_quotas} is TRUE
 #'   \code{anti_sample} is automatically set to FALSE. The default is FALSE.
 #' @return A tibble of traffic metrics.
-#' @return A tibble of traffic metrics.
 #' @keywords internal
 
 fetch_rb_traffic_public_by_filter <- function(
@@ -256,7 +255,10 @@ fetch_rb_traffic_public_by_type <- function(
 
     }
 
-    if (by_page && merge_paths) traffic <- merge_paths(traffic, by_date)
+    if (by_page && merge_paths) {
+        traffic <- merge_traffic_paths(traffic, by_date)
+    }
+
     traffic
 }
 
@@ -503,7 +505,11 @@ fetch_rb_traffic_intranet_by_type <- function(
         use_resource_quotas = use_resource_quotas)
 
     if (nrow(traffic) == 0) return(tibble::tibble())
-    if (by_page && merge_paths) traffic <- merge_paths(traffic, by_date)
+
+    if (by_page && merge_paths) {
+        traffic <- merge_traffic_paths(traffic, by_date)
+    }
+
     traffic
 }
 
@@ -720,7 +726,10 @@ fetch_rb_traffic_all_properties <- function(
         traffic <- dplyr::bind_rows(public, intranet)
     }
 
-    if (by_page && merge_paths) traffic <- merge_paths(traffic, by_date)
+    if (by_page && merge_paths) {
+        traffic <- merge_traffic_paths(traffic, by_date)
+    }
+
     traffic
 }
 

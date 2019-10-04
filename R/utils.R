@@ -14,7 +14,7 @@ get_path_from_url <- function(url) {
     stringr::str_to_lower(stringr::str_c("/", url_parts$path))
 }
 
-#' Aggregate metrics for all pages that have the same root path
+#' Aggregate traffic metrics for all pages that have the same root path
 #'
 #' \code{merge_paths} takes a tibble of traffic metrics by property, date and
 #'  page and sums the metrics for all pages that have the same path i.e. for
@@ -28,7 +28,7 @@ get_path_from_url <- function(url) {
 #'   the metrics have been summed for all pages with the same root path.
 #' @keywords internal
 
-merge_paths <- function(traffic, by_date) {
+merge_traffic_paths <- function(traffic, by_date) {
 
     if (!tibble::is_tibble(traffic)) {
         stop("traffic data is not a tibble")
@@ -66,5 +66,57 @@ merge_paths <- function(traffic, by_date) {
             sessions = sum(.data$sessions),
             pageviews = sum(.data$pageviews),
             unique_pageviews = sum(.data$unique_pageviews)) %>%
+        dplyr::ungroup()
+}
+
+#' Aggregate event metrics for all pages that have the same root path
+#'
+#' \code{merge_event_paths} takes a tibble of event metrics by property, date
+#'  and page and sums the metrics for all pages that have the same path i.e.
+#'  for all pages whose paths differ only by their query string and internal
+#'  links.
+#'
+#' @param traffic A tibble of event metrics by property, date and page path
+#'   returned from one of the events fetching functions.
+#' @param by_date A boolean indicating whether the results are broken down by
+#'   date.
+#' @return A tibble with the same column structure as the input tibble where
+#'   the metrics have been summed for all pages with the same root path.
+#' @keywords internal
+
+merge_event_paths <- function(events, by_date) {
+
+    if (!tibble::is_tibble(events)) {
+        stop("events data is not a tibble")
+    }
+
+    if (ncol(traffic) == 0) return(traffic)
+
+    expected_colnames <- c(
+        "page_path",
+        "total_events",
+        "unique_events")
+
+    if (by_date) expected_colnames <- c("date", expected_colnames)
+    expected_colnames <- c("property", expected_colnames)
+
+    if (! all(expected_colnames == colnames(traffic))) {
+        stop("events data does not have the expected columns")
+    }
+
+    events$page_path <- stringr::str_extract(events$page_path,"[^?#]+")
+
+    if (by_date) {
+        events <- events %>% dplyr::group_by(
+            .data$property, .data$date, .data$page_path)
+    } else {
+        events <- events %>% dplyr::group_by(
+            .data$property, .data$page_path)
+    }
+
+    events %>%
+        dplyr::summarise(
+            total_events = sum(.data$total_events),
+            unique_events = sum(.data$unique_events)) %>%
         dplyr::ungroup()
 }

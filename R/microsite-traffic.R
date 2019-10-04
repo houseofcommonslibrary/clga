@@ -155,7 +155,7 @@ fetch_ms_traffic_by_type <- function(
         use_resource_quotas = use_resource_quotas)
 
     if (nrow(traffic) == 0) return(tibble::tibble())
-    if (by_page && merge_paths) traffic <- merge_paths(traffic, by_date)
+    if (by_page && merge_paths) traffic <- merge_traffic_paths(traffic, by_date)
     traffic
 }
 
@@ -340,15 +340,15 @@ fetch_ms_traffic_by_category <- function(
         use_resource_quotas = use_resource_quotas)
 
     if (nrow(traffic) == 0) return(tibble::tibble())
-    if (by_page && merge_paths) traffic <- merge_paths(traffic, by_date)
+    if (by_page && merge_paths) traffic <- merge_traffic_paths(traffic, by_date)
     traffic
 }
 
 
 #' Download traffic data for insights on the Commons Library microsite
 #'
-#' \code{fetch_ms_insights_traffic} downloads data on traffic metrics for insights
-#' during the given dates and returns the data as a tibble.
+#' \code{fetch_ms_insights_traffic} downloads data on traffic metrics for
+#' insights during the given dates and returns the data as a tibble.
 #'
 #' Traffic figures can be requested by page. Google Analytics treats webpages
 #' requested with different query strings and section anchors as different
