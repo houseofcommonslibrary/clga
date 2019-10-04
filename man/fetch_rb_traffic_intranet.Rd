@@ -5,7 +5,8 @@
 \title{Download traffic data for all pages in the research briefings intranet view}
 \usage{
 fetch_rb_traffic_intranet(start_date, end_date, by_date = FALSE,
-  by_page = FALSE, merge_paths = FALSE, anti_sample = FALSE)
+  by_page = FALSE, merge_paths = FALSE, anti_sample = FALSE,
+  use_resource_quotas = FALSE)
 }
 \arguments{
 \item{start_date}{The start date as an ISO 8601 string.}
@@ -32,6 +33,15 @@ requested under the API limits that trigger sampling. This makes the
 download process slower but ensures that all records are returned. Only
 use this feature if you see that an API request triggers sampling without
 it. The default is FALSE.}
+
+\item{use_resource_quotas}{A boolean indicating whether to use the resource
+quotas in Parliament's Google Analytics account to prevent sampling.
+This is a faster and more effective way to disable sampling than using
+\code{anti_sample}, but using resource quotas consumes tokens from a
+limited daily quota. Use this when \code{anti_sample} still fails to
+prevent sampling or is taking too long. Note that using resource quotas
+takes precendence over anti-samping: if \code{use_resource_quotas} is TRUE
+\code{anti_sample} is automatically set to FALSE. The default is FALSE.}
 }
 \value{
 A tibble of traffic metrics.

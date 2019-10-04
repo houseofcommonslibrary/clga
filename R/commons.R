@@ -61,6 +61,14 @@
 #'   download process slower but ensures that all records are returned. Only
 #'   use this feature if you see that an API request triggers sampling without
 #'   it. The default is FALSE.
+#' @param use_resource_quotas A boolean indicating whether to use the resource
+#'   quotas in Parliament's Google Analytics account to prevent sampling.
+#'   This is a faster and more effective way to disable sampling than using
+#'   \code{anti_sample}, but using resource quotas consumes tokens from a
+#'   limited daily quota. Use this when \code{anti_sample} still fails to
+#'   prevent sampling or is taking too long. Note that using resource quotas
+#'   takes precendence over anti-samping: if \code{use_resource_quotas} is TRUE
+#'   \code{anti_sample} is automatically set to FALSE. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -72,7 +80,8 @@ fetch_crb_traffic_public <- function(
     by_page = FALSE,
     combine = FALSE,
     merge_paths = FALSE,
-    anti_sample = FALSE) {
+    anti_sample = FALSE,
+    use_resource_quotas = FALSE) {
 
     fetch_rb_traffic_public_by_type(
         start_date = start_date,
@@ -83,7 +92,8 @@ fetch_crb_traffic_public <- function(
         by_page = by_page,
         combine = combine,
         merge_paths = merge_paths,
-        anti_sample = anti_sample)
+        anti_sample = anti_sample,
+        use_resource_quotas = use_resource_quotas)
 }
 
 #' Download traffic data for all Commons briefing paper landing pages on the
@@ -145,6 +155,14 @@ fetch_crb_traffic_public <- function(
 #'   download process slower but ensures that all records are returned. Only
 #'   use this feature if you see that an API request triggers sampling without
 #'   it. The default is FALSE.
+#' @param use_resource_quotas A boolean indicating whether to use the resource
+#'   quotas in Parliament's Google Analytics account to prevent sampling.
+#'   This is a faster and more effective way to disable sampling than using
+#'   \code{anti_sample}, but using resource quotas consumes tokens from a
+#'   limited daily quota. Use this when \code{anti_sample} still fails to
+#'   prevent sampling or is taking too long. Note that using resource quotas
+#'   takes precendence over anti-samping: if \code{use_resource_quotas} is TRUE
+#'   \code{anti_sample} is automatically set to FALSE. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -156,7 +174,8 @@ fetch_cbp_traffic_public <- function(
     by_page = FALSE,
     combine = FALSE,
     merge_paths = FALSE,
-    anti_sample = FALSE) {
+    anti_sample = FALSE,
+    use_resource_quotas = FALSE) {
 
     fetch_rb_traffic_public_by_type(
         start_date = start_date,
@@ -167,7 +186,8 @@ fetch_cbp_traffic_public <- function(
         by_page = by_page,
         combine = combine,
         merge_paths = merge_paths,
-        anti_sample = anti_sample)
+        anti_sample = anti_sample,
+        use_resource_quotas = use_resource_quotas)
 }
 
 #' Download traffic data for all Commons debate pack landing pages on the main
@@ -229,6 +249,14 @@ fetch_cbp_traffic_public <- function(
 #'   download process slower but ensures that all records are returned. Only
 #'   use this feature if you see that an API request triggers sampling without
 #'   it. The default is FALSE.
+#' @param use_resource_quotas A boolean indicating whether to use the resource
+#'   quotas in Parliament's Google Analytics account to prevent sampling.
+#'   This is a faster and more effective way to disable sampling than using
+#'   \code{anti_sample}, but using resource quotas consumes tokens from a
+#'   limited daily quota. Use this when \code{anti_sample} still fails to
+#'   prevent sampling or is taking too long. Note that using resource quotas
+#'   takes precendence over anti-samping: if \code{use_resource_quotas} is TRUE
+#'   \code{anti_sample} is automatically set to FALSE. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -240,7 +268,8 @@ fetch_cdp_traffic_public <- function(
     by_page = FALSE,
     combine = FALSE,
     merge_paths = FALSE,
-    anti_sample = FALSE) {
+    anti_sample = FALSE,
+    use_resource_quotas = FALSE) {
 
     fetch_rb_traffic_public_by_type(
         start_date = start_date,
@@ -251,7 +280,8 @@ fetch_cdp_traffic_public <- function(
         by_page = by_page,
         combine = combine,
         merge_paths = merge_paths,
-        anti_sample = anti_sample)
+        anti_sample = anti_sample,
+        use_resource_quotas = use_resource_quotas)
 }
 
 # Sets of pages: Intranet -----------------------------------------------------
@@ -297,6 +327,14 @@ fetch_cdp_traffic_public <- function(
 #'   download process slower but ensures that all records are returned. Only
 #'   use this feature if you see that an API request triggers sampling without
 #'   it. The default is FALSE.
+#' @param use_resource_quotas A boolean indicating whether to use the resource
+#'   quotas in Parliament's Google Analytics account to prevent sampling.
+#'   This is a faster and more effective way to disable sampling than using
+#'   \code{anti_sample}, but using resource quotas consumes tokens from a
+#'   limited daily quota. Use this when \code{anti_sample} still fails to
+#'   prevent sampling or is taking too long. Note that using resource quotas
+#'   takes precendence over anti-samping: if \code{use_resource_quotas} is TRUE
+#'   \code{anti_sample} is automatically set to FALSE. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -306,7 +344,8 @@ fetch_crb_traffic_intranet <- function(
     by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE,
-    anti_sample = FALSE) {
+    anti_sample = FALSE,
+    use_resource_quotas = FALSE) {
 
     fetch_rb_traffic_intranet_by_type(
         start_date = start_date,
@@ -315,7 +354,8 @@ fetch_crb_traffic_intranet <- function(
         by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths,
-        anti_sample = anti_sample)
+        anti_sample = anti_sample,
+        use_resource_quotas = use_resource_quotas)
 }
 
 #' Download traffic data for all Commons briefing paper landing pages on
@@ -359,6 +399,14 @@ fetch_crb_traffic_intranet <- function(
 #'   download process slower but ensures that all records are returned. Only
 #'   use this feature if you see that an API request triggers sampling without
 #'   it. The default is FALSE.
+#' @param use_resource_quotas A boolean indicating whether to use the resource
+#'   quotas in Parliament's Google Analytics account to prevent sampling.
+#'   This is a faster and more effective way to disable sampling than using
+#'   \code{anti_sample}, but using resource quotas consumes tokens from a
+#'   limited daily quota. Use this when \code{anti_sample} still fails to
+#'   prevent sampling or is taking too long. Note that using resource quotas
+#'   takes precendence over anti-samping: if \code{use_resource_quotas} is TRUE
+#'   \code{anti_sample} is automatically set to FALSE. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -368,7 +416,8 @@ fetch_cbp_traffic_intranet <- function(
     by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE,
-    anti_sample = FALSE) {
+    anti_sample = FALSE,
+    use_resource_quotas = FALSE) {
 
     fetch_rb_traffic_intranet_by_type(
         start_date = start_date,
@@ -377,7 +426,8 @@ fetch_cbp_traffic_intranet <- function(
         by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths,
-        anti_sample = anti_sample)
+        anti_sample = anti_sample,
+        use_resource_quotas = use_resource_quotas)
 }
 
 #' Download traffic data for all Commons debate pack landing pages on the
@@ -421,6 +471,14 @@ fetch_cbp_traffic_intranet <- function(
 #'   download process slower but ensures that all records are returned. Only
 #'   use this feature if you see that an API request triggers sampling without
 #'   it. The default is FALSE.
+#' @param use_resource_quotas A boolean indicating whether to use the resource
+#'   quotas in Parliament's Google Analytics account to prevent sampling.
+#'   This is a faster and more effective way to disable sampling than using
+#'   \code{anti_sample}, but using resource quotas consumes tokens from a
+#'   limited daily quota. Use this when \code{anti_sample} still fails to
+#'   prevent sampling or is taking too long. Note that using resource quotas
+#'   takes precendence over anti-samping: if \code{use_resource_quotas} is TRUE
+#'   \code{anti_sample} is automatically set to FALSE. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -430,7 +488,8 @@ fetch_cdp_traffic_intranet <- function(
     by_date = FALSE,
     by_page = FALSE,
     merge_paths = FALSE,
-    anti_sample = FALSE) {
+    anti_sample = FALSE,
+    use_resource_quotas = FALSE) {
 
     fetch_rb_traffic_intranet_by_type(
         start_date = start_date,
@@ -439,7 +498,8 @@ fetch_cdp_traffic_intranet <- function(
         by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths,
-        anti_sample = anti_sample)
+        anti_sample = anti_sample,
+        use_resource_quotas = use_resource_quotas)
 }
 
 # Sets of pages: All research briefings ---------------------------------------
@@ -502,6 +562,14 @@ fetch_cdp_traffic_intranet <- function(
 #'   download process slower but ensures that all records are returned. Only
 #'   use this feature if you see that an API request triggers sampling without
 #'   it. The default is FALSE.
+#' @param use_resource_quotas A boolean indicating whether to use the resource
+#'   quotas in Parliament's Google Analytics account to prevent sampling.
+#'   This is a faster and more effective way to disable sampling than using
+#'   \code{anti_sample}, but using resource quotas consumes tokens from a
+#'   limited daily quota. Use this when \code{anti_sample} still fails to
+#'   prevent sampling or is taking too long. Note that using resource quotas
+#'   takes precendence over anti-samping: if \code{use_resource_quotas} is TRUE
+#'   \code{anti_sample} is automatically set to FALSE. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -513,7 +581,8 @@ fetch_crb_traffic <- function(
     by_page = FALSE,
     combine = FALSE,
     merge_paths = FALSE,
-    anti_sample = FALSE) {
+    anti_sample = FALSE,
+    use_resource_quotas = FALSE) {
 
     fetch_rb_traffic_all_properties(
         fetch_crb_traffic_public,
@@ -525,7 +594,8 @@ fetch_crb_traffic <- function(
         by_page = by_page,
         combine = combine,
         merge_paths = merge_paths,
-        anti_sample = anti_sample)
+        anti_sample = anti_sample,
+        use_resource_quotas = use_resource_quotas)
 }
 
 #' Download traffic data for all Commons briefing papers in both the
@@ -581,6 +651,14 @@ fetch_crb_traffic <- function(
 #'   download process slower but ensures that all records are returned. Only
 #'   use this feature if you see that an API request triggers sampling without
 #'   it. The default is FALSE.
+#' @param use_resource_quotas A boolean indicating whether to use the resource
+#'   quotas in Parliament's Google Analytics account to prevent sampling.
+#'   This is a faster and more effective way to disable sampling than using
+#'   \code{anti_sample}, but using resource quotas consumes tokens from a
+#'   limited daily quota. Use this when \code{anti_sample} still fails to
+#'   prevent sampling or is taking too long. Note that using resource quotas
+#'   takes precendence over anti-samping: if \code{use_resource_quotas} is TRUE
+#'   \code{anti_sample} is automatically set to FALSE. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -592,7 +670,8 @@ fetch_cbp_traffic <- function(
     by_page = FALSE,
     combine = FALSE,
     merge_paths = FALSE,
-    anti_sample = FALSE) {
+    anti_sample = FALSE,
+    use_resource_quotas = FALSE) {
 
     fetch_rb_traffic_all_properties(
         fetch_cbp_traffic_public,
@@ -604,7 +683,8 @@ fetch_cbp_traffic <- function(
         by_page = by_page,
         combine = combine,
         merge_paths = merge_paths,
-        anti_sample = anti_sample)
+        anti_sample = anti_sample,
+        use_resource_quotas = use_resource_quotas)
 }
 
 #' Download traffic data for all Commons debate packs in both the research
@@ -660,6 +740,14 @@ fetch_cbp_traffic <- function(
 #'   download process slower but ensures that all records are returned. Only
 #'   use this feature if you see that an API request triggers sampling without
 #'   it. The default is FALSE.
+#' @param use_resource_quotas A boolean indicating whether to use the resource
+#'   quotas in Parliament's Google Analytics account to prevent sampling.
+#'   This is a faster and more effective way to disable sampling than using
+#'   \code{anti_sample}, but using resource quotas consumes tokens from a
+#'   limited daily quota. Use this when \code{anti_sample} still fails to
+#'   prevent sampling or is taking too long. Note that using resource quotas
+#'   takes precendence over anti-samping: if \code{use_resource_quotas} is TRUE
+#'   \code{anti_sample} is automatically set to FALSE. The default is FALSE.
 #' @return A tibble of traffic metrics.
 #' @export
 
@@ -671,7 +759,8 @@ fetch_cdp_traffic <- function(
     by_page = FALSE,
     combine = FALSE,
     merge_paths = FALSE,
-    anti_sample = FALSE) {
+    anti_sample = FALSE,
+    use_resource_quotas = FALSE) {
 
     fetch_rb_traffic_all_properties(
         fetch_cdp_traffic_public,
@@ -683,5 +772,6 @@ fetch_cdp_traffic <- function(
         by_page = by_page,
         combine = combine,
         merge_paths = merge_paths,
-        anti_sample = anti_sample)
+        anti_sample = anti_sample,
+        use_resource_quotas = use_resource_quotas)
 }
