@@ -17,8 +17,8 @@ get_path_from_url <- function(url) {
 #' Aggregate traffic metrics for all pages that have the same root path
 #'
 #' \code{merge_paths} takes a tibble of traffic metrics by property, date and
-#'  page and sums the metrics for all pages that have the same path i.e. for
-#'  all pages whose paths differ only by their query string and internal links.
+#' page and sums the metrics for all pages that have the same path i.e. for
+#' all pages whose paths differ only by their query string and internal links.
 #'
 #' @param traffic A tibble of traffic metrics by property, date and page path
 #'   returned from one of the fetch_*_traffic functions.
@@ -69,54 +69,76 @@ merge_traffic_paths <- function(traffic, by_date) {
         dplyr::ungroup()
 }
 
-#' Aggregate event metrics for all pages that have the same root path
+#' Aggregate document download metrics for all pages that have the same root
+#' path
 #'
-#' \code{merge_event_paths} takes a tibble of event metrics by property, date
-#'  and page and sums the metrics for all pages that have the same path i.e.
-#'  for all pages whose paths differ only by their query string and internal
-#'  links.
+#' \code{merge_download_paths} takes a tibble of document download metrics by
+#' property, date and page and sums the metrics for all pages that have the
+#' same path i.e. for all pages whose paths differ only by their query string
+#' and internal links.
 #'
-#' @param traffic A tibble of event metrics by property, date and page path
-#'   returned from one of the events fetching functions.
+#' @param downloads A tibble of document download metrics by property, date and
+#'   page path returned from one of the download fetching functions.
 #' @param by_date A boolean indicating whether the results are broken down by
 #'   date.
 #' @return A tibble with the same column structure as the input tibble where
 #'   the metrics have been summed for all pages with the same root path.
 #' @keywords internal
 
-merge_event_paths <- function(events, by_date) {
+merge_download_paths <- function(downloads, by_date) {
 
-    if (!tibble::is_tibble(events)) {
-        stop("events data is not a tibble")
+    if (!tibble::is_tibble(downloads)) {
+        stop("downloads data is not a tibble")
     }
 
-    if (ncol(traffic) == 0) return(traffic)
+    if (ncol(downloads) == 0) return(downloads)
 
     expected_colnames <- c(
         "page_path",
-        "total_events",
-        "unique_events")
+        "total_downloads",
+        "unique_downloads")
 
     if (by_date) expected_colnames <- c("date", expected_colnames)
     expected_colnames <- c("property", expected_colnames)
 
-    if (! all(expected_colnames == colnames(traffic))) {
-        stop("events data does not have the expected columns")
+    if (! all(expected_colnames == colnames(downloads))) {
+        stop("downloads data does not have the expected columns")
     }
 
-    events$page_path <- stringr::str_extract(events$page_path,"[^?#]+")
+    downloads$page_path <- stringr::str_extract(downloads$page_path,"[^?#]+")
 
     if (by_date) {
-        events <- events %>% dplyr::group_by(
+        downloads <- downloads %>% dplyr::group_by(
             .data$property, .data$date, .data$page_path)
     } else {
-        events <- events %>% dplyr::group_by(
+        downloads <- downloads %>% dplyr::group_by(
             .data$property, .data$page_path)
     }
 
-    events %>%
+    downloads %>%
         dplyr::summarise(
-            total_events = sum(.data$total_events),
-            unique_events = sum(.data$unique_events)) %>%
+            total_downloads = sum(.data$total_downloads),
+            unique_downloads = sum(.data$unique_downloads)) %>%
         dplyr::ungroup()
+}
+
+#' Label event metrics with the events they represent
+#'
+#' \code{label_events} takes a tibble of event metrics and re-labels the event
+#' counts to represent the specific events in question.
+#'
+#' @param events A tibble of event metrics returned from one of the event
+#'   fetching functions.
+#' @return A tibble whose data is identical to input tibble but whose event
+#'   count columns are renamed with the given event name.
+#' @keywords internal
+
+label_events <- function(events, event_name) {
+
+    total_label <- stringr::str_glue("total_{event_name}")
+    unique_label <- stringr::str_glue("unique_{event_name}")
+
+    events %>% dplyr::rename(
+        !! total_label := .data$total_events,
+        !! unique_label := .data$unique_events)
 }

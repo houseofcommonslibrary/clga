@@ -344,6 +344,7 @@ fetch_rb_traffic_public <- function(
     fetch_rb_traffic_public_by_type(
         start_date = start_date,
         end_date = end_date,
+        type_regexp = PATH_REGEXP_ALL,
         internal = internal,
         by_date = by_date,
         by_page = by_page,
@@ -515,9 +516,9 @@ fetch_rb_traffic_intranet_by_type <- function(
 
 #' Download traffic data for all pages in the research briefings intranet view
 #'
-#' \code{fetch_rb_traffic_intranet_by_filter} downloads data on traffic metrics
-#' for all research briefings on the Parliamentary intranet during the given
-#' dates, with the given filters, and returns the data as a tibble.
+#' \code{fetch_rb_traffic_intranet} downloads data on traffic metrics for all
+#' research briefings on the Parliamentary intranet during the given dates,
+#' with the given filters, and returns the data as a tibble.
 #'
 #' Note that this is not all research briefings traffic, as it does not include
 #' traffic to the research briefings pages on the main Parliament website. Use
@@ -575,6 +576,7 @@ fetch_rb_traffic_intranet <- function(
     fetch_rb_traffic_intranet_by_type(
         start_date = start_date,
         end_date = end_date,
+        type_regexp = PATH_REGEXP_ALL,
         by_date = by_date,
         by_page = by_page,
         merge_paths = merge_paths,
@@ -1004,8 +1006,8 @@ fetch_traffic_for_rb_public <- function(
 #' Parliamentary intranet
 #'
 #' \code{fetch_traffic_for_rb_intranet} downloads data on traffic metrics for a
-#' given research briefing url on the main Parliament website during the
-#' given dates and returns the data as a tibble.
+#' given research briefing url on the Parliamentary intranet during the given
+#' dates and returns the data as a tibble.
 #'
 #' @param url The URL of a page for which traffic data is requested.
 #' @param start_date The start date as an ISO 8601 string.

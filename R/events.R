@@ -37,6 +37,9 @@ fetch_events <- function(
     anti_sample = FALSE,
     use_resource_quotas = FALSE) {
 
+    # Disable anti_sample if use_resource_quotas is TRUE
+    if (use_resource_quotas) anti_sample = FALSE
+
     googleAnalyticsR::google_analytics(
             view_id,
             date_range = c(start_date, end_date),
