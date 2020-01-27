@@ -3,7 +3,6 @@
 \docType{package}
 \name{clga}
 \alias{clga}
-\alias{clga-package}
 \title{clga: Download Traffic Data for Commons Library content from Google Analytics}
 \description{
 clga: Download Traffic Data for Commons Library content from Google Analytics
