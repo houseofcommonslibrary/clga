@@ -4,9 +4,15 @@
 \alias{fetch_traffic}
 \title{Download traffic data for a given view}
 \usage{
-fetch_traffic(view_id, start_date, end_date, dimensions = NULL,
-  dim_filters = NULL, anti_sample = FALSE,
-  use_resource_quotas = FALSE)
+fetch_traffic(
+  view_id,
+  start_date,
+  end_date,
+  dimensions = NULL,
+  dim_filters = NULL,
+  anti_sample = FALSE,
+  use_resource_quotas = FALSE
+)
 }
 \arguments{
 \item{view_id}{The view id in Google Analytics}
