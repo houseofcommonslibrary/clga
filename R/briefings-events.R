@@ -218,6 +218,8 @@ fetch_rb_downloads_public_by_type <- function(
 
     if (nrow(downloads) == 0) return(tibble::tibble())
 
+    downloads <- label_events(downloads, "downloads")
+
     if (combine) {
 
         downloads <- downloads %>% dplyr::mutate(property = LABEL_RB_PUBLIC)
@@ -244,15 +246,11 @@ fetch_rb_downloads_public_by_type <- function(
         }
 
         downloads <- downloads %>% dplyr::summarise(
-                users = sum(.data$users),
-                sessions = sum(.data$sessions),
-                pageviews = sum(.data$pageviews),
-                unique_pageviews = sum(.data$unique_pageviews)) %>%
+                total_downloads = sum(.data$total_downloads),
+                unique_downloads = sum(.data$unique_downloads)) %>%
             dplyr::ungroup()
 
     }
-
-    downloads <- label_events(downloads, "downloads")
 
     if (by_page && merge_paths) {
         downloads <- merge_download_paths(downloads, by_date)
@@ -669,25 +667,25 @@ fetch_rb_downloads_all_properties <- function(
         if (by_date) {
 
             if (by_page) {
-                all <- downloads %>%
+                downloads <- downloads %>%
                     dplyr::group_by(.data$property, .data$date, .data$page_path)
             } else {
-                all <- downloads %>%
+                downloads <- downloads %>%
                     dplyr::group_by(.data$property, .data$date)
             }
 
         } else {
 
             if (by_page) {
-                all <- downloads %>%
+                downloads <- downloads %>%
                     dplyr::group_by(.data$property, .data$page_path)
             } else {
-                all <- downloads %>%
+                downloads <- downloads %>%
                     dplyr::group_by(.data$property)
             }
         }
 
-        downloads <- all %>% dplyr::summarise(
+        downloads <- downloads %>% dplyr::summarise(
                 total_downloads = sum(.data$total_downloads),
                 unique_downloads = sum(.data$unique_downloads)) %>%
             dplyr::ungroup()
@@ -915,6 +913,8 @@ fetch_downloads_for_rb_public <- function(
 
     if (nrow(downloads) == 0) return(tibble::tibble())
 
+    downloads <- label_events(downloads, "downloads")
+
     downloads <- downloads %>% dplyr::mutate(page_path = page_path)
 
     if (by_date) {
@@ -944,17 +944,13 @@ fetch_downloads_for_rb_public <- function(
                 dplyr::group_by(.data$property, .data$page_path)
         }
 
-        downloads <- downloads %>%
-            dplyr::summarise(
-                users = sum(.data$users),
-                sessions = sum(.data$sessions),
-                pageviews = sum(.data$pageviews),
-                unique_pageviews = sum(.data$unique_pageviews)) %>%
+        downloads <- downloads %>% dplyr::summarise(
+                total_downloads = sum(.data$total_downloads),
+                unique_downloads = sum(.data$unique_downloads)) %>%
             dplyr::ungroup()
 
+        downloads
     }
-
-    label_events(downloads, "downloads")
 }
 
 # Individual pages: Intranet --------------------------------------------------
@@ -1137,12 +1133,9 @@ fetch_downloads_for_rb <- function(
                 dplyr::group_by(.data$property, .data$page_path)
         }
 
-        downloads <- downloads %>%
-            dplyr::summarise(
-                users = sum(.data$users),
-                sessions = sum(.data$sessions),
-                pageviews = sum(.data$pageviews),
-                unique_pageviews = sum(.data$unique_pageviews)) %>%
+        downloads <- downloads %>% dplyr::summarise(
+                total_downloads = sum(.data$total_downloads),
+                unique_downloads = sum(.data$unique_downloads)) %>%
             dplyr::ungroup()
 
     } else {
