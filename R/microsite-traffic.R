@@ -66,6 +66,8 @@ fetch_ms_traffic_by_filter <- function(
     traffic
 }
 
+# Types -----------------------------------------------------------------------
+
 #' Download traffic data for different types of posts on the Commons Library
 #' microsite
 #'
@@ -159,7 +161,7 @@ fetch_ms_traffic_by_type <- function(
     traffic
 }
 
-#' Download traffic data for all pages in the Commons Library microsite
+#' Download traffic data for all pages on the Commons Library microsite
 #'
 #' \code{fetch_ms_traffic} downloads data on traffic metrics for all posts on
 #' the Commons Library microsite during the given dates and returns the data
@@ -219,6 +221,7 @@ fetch_ms_traffic <- function(
     fetch_ms_traffic_by_type(
         start_date = start_date,
         end_date = end_date,
+        type_regexp = PATH_REGEXP_ALL,
         internal = internal,
         by_date = by_date,
         by_page = by_page,
@@ -226,6 +229,221 @@ fetch_ms_traffic <- function(
         anti_sample = anti_sample,
         use_resource_quotas = use_resource_quotas)
 }
+
+#' Download traffic data for all research briefing landing pages on the Commons
+#' Library microsite
+#'
+#' \code{fetch_ms_crb_traffic} downloads data on traffic metrics for all
+#' Commons Library research briefings on the Commons Library microsite during
+#' the given dates and returns the data as a tibble. These are the landing
+#' pages for briefings whose codes begin with "SN", "CBP" or "CDP".
+#'
+#' Traffic figures can be requested by page. Google Analytics treats webpages
+#' requested with different query strings and section anchors as different
+#' pages in its traffic data. You can use the \code{merge_paths} argument to
+#' optionally sum the figures for pages with the same base path. This makes it
+#' easier to calculcate the total number of views each distinct page has
+#' received, but note that this may introduce errors in the number of users, as
+#' a user may visit the same page using URLs with different query strings and
+#' anchors.
+#'
+#' @param start_date The start date as an ISO 8601 string.
+#' @param end_date The end date as an ISO 8601 string.
+#' @param internal A boolean indicating whether to return only the results for
+#'   traffic from internal parliamentary networks. The default is FALSE.
+#' @param by_date A boolean indicating whether to return the results broken
+#'   down by date. The default is FALSE.
+#' @param by_page A boolean indicating whether to return the results broken
+#'   down by individual page. The default is FALSE.
+#' @param merge_paths A boolean indicating whether to aggregate figures for all
+#'   pages that have the same root path i.e. for all pages whose paths differ
+#'   only by their query strings or internal anchors. This parameter is ignored
+#'   if \code{by_page} is set to FALSE. Note that while merging paths is
+#'   necessary for analysis of individual pages it can introduce errors in the
+#'   number of users by page, as the same user may visit the same page through
+#'   URLs with different query strings and anchors. The default value is FALSE.
+#' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
+#'   anti-sample feature, which chunks API calls to keep the number of records
+#'   requested under the API limits that trigger sampling. This makes the
+#'   download process slower but ensures that all records are returned. Only
+#'   use this feature if you see that an API request triggers sampling without
+#'   it. The default is FALSE.
+#' @param use_resource_quotas A boolean indicating whether to use the resource
+#'   quotas in Parliament's Google Analytics account to prevent sampling.
+#'   This is a faster and more effective way to disable sampling than using
+#'   \code{anti_sample}, but using resource quotas consumes tokens from a
+#'   limited daily quota. Use this when \code{anti_sample} still fails to
+#'   prevent sampling or is taking too long. Note that using resource quotas
+#'   takes precendence over anti-samping: if \code{use_resource_quotas} is TRUE
+#'   \code{anti_sample} is automatically set to FALSE. The default is FALSE.
+#' @return A tibble of traffic metrics.
+#' @export
+
+fetch_ms_crb_traffic <- function(
+    start_date,
+    end_date,
+    internal = FALSE,
+    by_date = FALSE,
+    by_page = FALSE,
+    merge_paths = FALSE,
+    anti_sample = FALSE,
+    use_resource_quotas = FALSE) {
+
+    fetch_ms_traffic_by_type(
+        start_date = start_date,
+        end_date = end_date,
+        type_regexp = PATH_REGEXP_MS_CRB,
+        internal = internal,
+        by_date = by_date,
+        by_page = by_page,
+        merge_paths = merge_paths,
+        anti_sample = anti_sample,
+        use_resource_quotas = use_resource_quotas)
+}
+
+#' Download traffic data for all Commons briefing paper landing pages on the
+#' Commons Library microsite
+#'
+#' \code{fetch_ms_cbp_traffic} downloads data on traffic metrics for all
+#' Commons Library briefing papers on the Commons Library microsite during the
+#' given dates and returns the data as a tibble. These are the landing pages
+#' for briefings whose ids begin with "SN" or "CBP".
+#'
+#' Traffic figures can be requested by page. Google Analytics treats webpages
+#' requested with different query strings and section anchors as different
+#' pages in its traffic data. You can use the \code{merge_paths} argument to
+#' optionally sum the figures for pages with the same base path. This makes it
+#' easier to calculcate the total number of views each distinct page has
+#' received, but note that this may introduce errors in the number of users, as
+#' a user may visit the same page using URLs with different query strings and
+#' anchors.
+#'
+#' @param start_date The start date as an ISO 8601 string.
+#' @param end_date The end date as an ISO 8601 string.
+#' @param internal A boolean indicating whether to return only the results for
+#'   traffic from internal parliamentary networks. The default is FALSE.
+#' @param by_date A boolean indicating whether to return the results broken
+#'   down by date. The default is FALSE.
+#' @param by_page A boolean indicating whether to return the results broken
+#'   down by individual page. The default is FALSE.
+#' @param merge_paths A boolean indicating whether to aggregate figures for all
+#'   pages that have the same root path i.e. for all pages whose paths differ
+#'   only by their query strings or internal anchors. This parameter is ignored
+#'   if \code{by_page} is set to FALSE. Note that while merging paths is
+#'   necessary for analysis of individual pages it can introduce errors in the
+#'   number of users by page, as the same user may visit the same page through
+#'   URLs with different query strings and anchors. The default value is FALSE.
+#' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
+#'   anti-sample feature, which chunks API calls to keep the number of records
+#'   requested under the API limits that trigger sampling. This makes the
+#'   download process slower but ensures that all records are returned. Only
+#'   use this feature if you see that an API request triggers sampling without
+#'   it. The default is FALSE.
+#' @param use_resource_quotas A boolean indicating whether to use the resource
+#'   quotas in Parliament's Google Analytics account to prevent sampling.
+#'   This is a faster and more effective way to disable sampling than using
+#'   \code{anti_sample}, but using resource quotas consumes tokens from a
+#'   limited daily quota. Use this when \code{anti_sample} still fails to
+#'   prevent sampling or is taking too long. Note that using resource quotas
+#'   takes precendence over anti-samping: if \code{use_resource_quotas} is TRUE
+#'   \code{anti_sample} is automatically set to FALSE. The default is FALSE.
+#' @return A tibble of traffic metrics.
+#' @export
+
+fetch_ms_cbp_traffic <- function(
+    start_date,
+    end_date,
+    internal = FALSE,
+    by_date = FALSE,
+    by_page = FALSE,
+    merge_paths = FALSE,
+    anti_sample = FALSE,
+    use_resource_quotas = FALSE) {
+
+    fetch_ms_traffic_by_type(
+        start_date = start_date,
+        end_date = end_date,
+        type_regexp = PATH_REGEXP_MS_CBP,
+        internal = internal,
+        by_date = by_date,
+        by_page = by_page,
+        merge_paths = merge_paths,
+        anti_sample = anti_sample,
+        use_resource_quotas = use_resource_quotas)
+}
+
+#' Download traffic data for all Commons debate pack landing pages on the
+#' Commons Library microsite
+#'
+#' \code{fetch_ms_cdp_traffic} downloads data on traffic metrics for all
+#' Commons Library debate packs on the Commons Library microsite during the
+#' given dates and returns the data as a tibble. These are the landing pages
+#' for briefings whose ids begin with "CDP".
+#'
+#' Traffic figures can be requested by page. Google Analytics treats webpages
+#' requested with different query strings and section anchors as different
+#' pages in its traffic data. You can use the \code{merge_paths} argument to
+#' optionally sum the figures for pages with the same base path. This makes it
+#' easier to calculcate the total number of views each distinct page has
+#' received, but note that this may introduce errors in the number of users, as
+#' a user may visit the same page using URLs with different query strings and
+#' anchors.
+#'
+#' @param start_date The start date as an ISO 8601 string.
+#' @param end_date The end date as an ISO 8601 string.
+#' @param internal A boolean indicating whether to return only the results for
+#'   traffic from internal parliamentary networks. The default is FALSE.
+#' @param by_date A boolean indicating whether to return the results broken
+#'   down by date. The default is FALSE.
+#' @param by_page A boolean indicating whether to return the results broken
+#'   down by individual page. The default is FALSE.
+#' @param merge_paths A boolean indicating whether to aggregate figures for all
+#'   pages that have the same root path i.e. for all pages whose paths differ
+#'   only by their query strings or internal anchors. This parameter is ignored
+#'   if \code{by_page} is set to FALSE. Note that while merging paths is
+#'   necessary for analysis of individual pages it can introduce errors in the
+#'   number of users by page, as the same user may visit the same page through
+#'   URLs with different query strings and anchors. The default value is FALSE.
+#' @param anti_sample A boolean indicating whether to use googleAnalyticsR's
+#'   anti-sample feature, which chunks API calls to keep the number of records
+#'   requested under the API limits that trigger sampling. This makes the
+#'   download process slower but ensures that all records are returned. Only
+#'   use this feature if you see that an API request triggers sampling without
+#'   it. The default is FALSE.
+#' @param use_resource_quotas A boolean indicating whether to use the resource
+#'   quotas in Parliament's Google Analytics account to prevent sampling.
+#'   This is a faster and more effective way to disable sampling than using
+#'   \code{anti_sample}, but using resource quotas consumes tokens from a
+#'   limited daily quota. Use this when \code{anti_sample} still fails to
+#'   prevent sampling or is taking too long. Note that using resource quotas
+#'   takes precendence over anti-samping: if \code{use_resource_quotas} is TRUE
+#'   \code{anti_sample} is automatically set to FALSE. The default is FALSE.
+#' @return A tibble of traffic metrics.
+#' @export
+
+fetch_ms_cdp_traffic <- function(
+    start_date,
+    end_date,
+    internal = FALSE,
+    by_date = FALSE,
+    by_page = FALSE,
+    merge_paths = FALSE,
+    anti_sample = FALSE,
+    use_resource_quotas = FALSE) {
+
+    fetch_ms_traffic_by_type(
+        start_date = start_date,
+        end_date = end_date,
+        type_regexp = PATH_REGEXP_MS_CDP,
+        internal = internal,
+        by_date = by_date,
+        by_page = by_page,
+        merge_paths = merge_paths,
+        anti_sample = anti_sample,
+        use_resource_quotas = use_resource_quotas)
+}
+
+# Categories ------------------------------------------------------------------
 
 #' Download traffic data for different categories of posts on the Commons
 #' Library microsite
@@ -343,7 +561,6 @@ fetch_ms_traffic_by_category <- function(
     if (by_page && merge_paths) traffic <- merge_traffic_paths(traffic, by_date)
     traffic
 }
-
 
 #' Download traffic data for insights on the Commons Library microsite
 #'

@@ -20,7 +20,11 @@ PATH_REGEXP_ALL <- "^\\/.{0,}$"
 PATH_REGEXP_RB_CRB <- "^\\/researchbriefing\\/summary\\/(sn|cbp|cdp).{0,}$"
 PATH_REGEXP_RB_CBP <- "^\\/researchbriefing\\/summary\\/(sn|cbp).{0,}$"
 PATH_REGEXP_RB_CDP <- "^\\/researchbriefing\\/summary\\/cdp.{0,}$"
-PATH_REGEXP_MS_COLLECTIONS <- "^\\/(\\?.{0,})$|^\\/[a-zA-Z0-9_\\-]{1,}\\/$|^\\/category\\/.{0,}$"
+
+PATH_REGEXP_MS_COLLECTIONS <- "^\\/$|^\\/(\\?.{0,})$|^\\/[a-zA-Z0-9_\\-]{1,}\\/$|^\\/category\\/.{0,}$|^\\/briefing-type\\/.{0,}$"
+PATH_REGEXP_MS_CRB <- "^\\/research-briefings\\/(sn|cbp|cdp).{0,}$"
+PATH_REGEXP_MS_CBP <- "^\\/research-briefings\\/(sn|cbp).{0,}$"
+PATH_REGEXP_MS_CDP <- "^\\/research-briefings\\/cdp.{0,}$"
 
 NETWORK_REGEXP_INTERNAL <- "^(the house of commons|parliamentary ict)$"
 

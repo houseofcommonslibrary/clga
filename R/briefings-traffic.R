@@ -1195,3 +1195,4 @@ fetch_traffic_for_rb <- function(
 
     traffic
 }
+

@@ -11,7 +11,9 @@
 
 get_path_from_url <- function(url) {
     url_parts <- urltools::url_parse(url)
-    stringr::str_to_lower(stringr::str_c("/", url_parts$path))
+    path <- stringr::str_to_lower(stringr::str_c("/", url_parts$path))
+    if(is.na(path)) path <- "/"
+    path
 }
 
 #' Aggregate traffic metrics for all pages that have the same root path
