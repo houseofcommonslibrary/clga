@@ -4,6 +4,3 @@
 \name{clga}
 \alias{clga}
 \title{clga: Download Traffic Data for Commons Library content from Google Analytics}
-\description{
-clga: Download Traffic Data for Commons Library content from Google Analytics
-}

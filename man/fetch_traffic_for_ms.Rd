@@ -9,6 +9,7 @@ fetch_traffic_for_ms(
   url,
   start_date,
   end_date,
+  match_exact = FALSE,
   internal = FALSE,
   by_date = FALSE,
   anti_sample = FALSE,
@@ -21,6 +22,15 @@ fetch_traffic_for_ms(
 \item{start_date}{The start date as an ISO 8601 string.}
 
 \item{end_date}{The end date as an ISO 8601 string.}
+
+\item{match_exact}{A boolean indicating whether to match only pages with the
+exact URL or pages which start with the URL. In general, if you need
+traffic data for individual insights and research briefings you don't want
+to use an exact match, as it will exclude requests for the page that
+contained query strings, which are sometimes used for tracking marketing
+campaigns. However, when fetching traffic data for category pages an
+exact match is necessary to exclude other pages with same URL stem. The
+default is FALSE.}
 
 \item{internal}{A boolean indicating whether to return only the results for
 traffic from internal parliamentary networks. The default is FALSE.}

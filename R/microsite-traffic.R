@@ -495,6 +495,14 @@ fetch_ms_dashboards_traffic <- function(
 #' @param url The URL of a page for which traffic data is requested.
 #' @param start_date The start date as an ISO 8601 string.
 #' @param end_date The end date as an ISO 8601 string.
+#' @param match_exact A boolean indicating whether to match only pages with the
+#'   exact URL or pages which start with the URL. In general, if you need
+#'   traffic data for individual insights and research briefings you don't want
+#'   to use an exact match, as it will exclude requests for the page that
+#'   contained query strings, which are sometimes used for tracking marketing
+#'   campaigns. However, when fetching traffic data for category pages an
+#'   exact match is necessary to exclude other pages with same URL stem. The
+#'   default is FALSE.
 #' @param internal A boolean indicating whether to return only the results for
 #'   traffic from internal parliamentary networks. The default is FALSE.
 #' @param by_date A boolean indicating whether to return the results broken
@@ -520,6 +528,7 @@ fetch_traffic_for_ms <- function(
     url,
     start_date,
     end_date,
+    match_exact = FALSE,
     internal = FALSE,
     by_date = FALSE,
     anti_sample = FALSE,
@@ -534,9 +543,11 @@ fetch_traffic_for_ms <- function(
 
     page_path <- get_path_from_url(url)
 
+    match_type <- ifelse(match_exact, "EXACT", "BEGINS_WITH")
+
     path_filter <- googleAnalyticsR::dim_filter(
         "pagePath",
-        "BEGINS_WITH",
+        match_type,
         page_path)
 
     network_filter <- googleAnalyticsR::dim_filter(
