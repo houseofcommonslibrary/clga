@@ -59,9 +59,9 @@ takes precendence over anti-samping: if \code{use_resource_quotas} is TRUE
 A tibble of document download metrics.
 }
 \description{
-\code{fetch_rb_downloads_public} downloads data on document download
-metrics for all research briefings on the public Parliament website during
-the given dates and returns the data as a tibble.
+\code{fetch_rb_downloads_public} downloads data on document download metrics
+for all research briefings on the public Parliament website during the given
+dates and returns the data as a tibble.
 }
 \details{
 Note that this is not all research briefing downloads, as it does not

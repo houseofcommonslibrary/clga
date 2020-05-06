@@ -4,3 +4,8 @@
 \name{clga}
 \alias{clga}
 \title{clga: Download Traffic Data for Commons Library content from Google Analytics}
+\description{
+This package contains a suite of functions for downloading data on traffic
+to research briefing landing pages and to the Commons Library website for
+research products produced by the House of Commons Library.
+}

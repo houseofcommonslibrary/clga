@@ -262,9 +262,9 @@ fetch_rb_downloads_public_by_type <- function(
 #' Download data on document downloads for all pages in the research briefings
 #' view
 #'
-#' \code{fetch_rb_downloads_public} downloads data on document download
-#' metrics for all research briefings on the public Parliament website during
-#' the given dates and returns the data as a tibble.
+#' \code{fetch_rb_downloads_public} downloads data on document download metrics
+#' for all research briefings on the public Parliament website during the given
+#' dates and returns the data as a tibble.
 #'
 #' Note that this is not all research briefing downloads, as it does not
 #' include downloads from the research briefings pages on the Parliamentary

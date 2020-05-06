@@ -702,11 +702,11 @@ fetch_ms_dashboards_traffic <- function(
 
 # Individual pages: Commons Library microsite ---------------------------------
 
-#' Download traffic data for a post with the given URL on the Commons Library
+#' Download traffic data for a page with the given URL on the Commons Library
 #' microsite
 #'
 #' \code{fetch_traffic_for_ms} downloads data on traffic metrics for a given
-#' post url on the Commons Library microsite during the given dates and returns
+#' url on the Commons Library microsite during the given dates and returns
 #' the data as a tibble.
 #'
 #' @param url The URL of a page for which traffic data is requested.
