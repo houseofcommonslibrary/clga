@@ -2,8 +2,12 @@ Package: clga
 Type: Package
 Title: Download Traffic Data for Commons Library content from Google Analytics
 Version: 0.1.0
-Author: Oliver Hawkins
-Maintainer: Oliver Hawkins <oli@olihawkins.com>
+Authors@R: 
+    person(
+        given = "Oliver",
+        family = "Hawkins",
+        role = c("aut", "cre"),
+        email = "oli@olihawkins.com")
 Description: Download data on web traffic for content produced by the House of
     Commons Library from Google Analytics.
 License: file LICENSE
@@ -18,5 +22,5 @@ Imports:
     stringr,
     tibble,
     urltools
-Remotes: olihawkins/clbrief
-RoxygenNote: 7.1.0
+Remotes: houseofcommonslibrary/clbrief
+RoxygenNote: 7.1.1

@@ -10,6 +10,6 @@ Install from GitHub using remotes.
 
 ```r
 install.packages("remotes")
-remotes::install_github("olihawkins/clga")
+remotes::install_github("houseofcommonslibrary/clga")
 ```
 
